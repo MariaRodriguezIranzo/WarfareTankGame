@@ -50,7 +50,7 @@ public class WeaponShooting : MonoBehaviour
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.velocity = firePoint.up * bulletSpeed;
+            rb.velocity = firePoint.forward * bulletSpeed;
         }
     }
 

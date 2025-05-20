@@ -89,7 +89,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 826b03f9baaa5f047802d49835f9b76f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -100,10 +100,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 826b03f9baaa5f047802d49835f9b76f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5621436987520888050}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 826b03f9baaa5f047802d49835f9b76f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8299625930838518481}
+      addedObject: {fileID: -7644283243122625154}
   m_SourcePrefab: {fileID: 100100000, guid: 826b03f9baaa5f047802d49835f9b76f, type: 3}
 --- !u!4 &8144555257211656588 stripped
 Transform:
@@ -115,38 +112,30 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 826b03f9baaa5f047802d49835f9b76f, type: 3}
   m_PrefabInstance: {fileID: 8542761865352674919}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5621436987520888050
-MonoBehaviour:
+--- !u!54 &-7644283243122625154
+Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8812582906323288886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 680076bc86553c54884b3e66df3cfcac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 5919220286410709334, guid: 487dbb68ef818f247a229a25fa68bcac, type: 3}
-  firePoint: {fileID: 9125273302533493666}
-  bulletSpeed: 20
-  maxAmmo: 100
-  reloadTime: 14
-  normalText: {fileID: 0}
-  audioSource: {fileID: 0}
-  shootSound: {fileID: 0}
-  reloadSound: {fileID: 0}
---- !u!114 &8299625930838518481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8812582906323288886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ab05dd1e649fbe4980015106a065391, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  turnSpeed: 100
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

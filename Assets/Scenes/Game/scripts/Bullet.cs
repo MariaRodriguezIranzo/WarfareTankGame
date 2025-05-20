@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour
             audioSource.PlayOneShot(shootingSound);  // Reproduce el sonido del disparo
         }
 
-        rb.velocity = transform.up * bulletSpeed;
+        rb.velocity = transform.forward * bulletSpeed;
         Destroy(gameObject, lifetime);
     }
 

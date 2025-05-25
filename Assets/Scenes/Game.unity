@@ -12902,7 +12902,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &334178576
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13054,10 +13054,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 433371758}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.9094166, y: 0.91544455}
-  m_AnchorMax: {x: 1, y: 0.96644455}
-  m_AnchoredPosition: {x: -2.8406982, y: -0.22631836}
-  m_SizeDelta: {x: -1.6400146, y: -5}
+  m_AnchorMin: {x: 0.9094792, y: 0.92300004}
+  m_AnchorMax: {x: 1, y: 0.9673705}
+  m_AnchoredPosition: {x: 0.15917969, y: 1.2000122}
+  m_SizeDelta: {x: -1.6400146, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &350445000
 MonoBehaviour:
@@ -13079,7 +13079,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 1000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -13106,15 +13106,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -15995,6 +15995,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2033811582}
   m_SourcePrefab: {fileID: 100100000, guid: 8d99185e17570a34980db737d1eb4cfd, type: 3}
+--- !u!4 &649174066 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8702101780596843642, guid: 86f0a2b153e2c134bbbea7ff30d96016, type: 3}
+  m_PrefabInstance: {fileID: 1795107119}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &650501628
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17626,9 +17631,27 @@ MonoBehaviour:
   minDistanciaHuida: 35
   distanciaBuffer: 35
   players:
-  - {fileID: 5825202676729910782, guid: ffd493c54a31543449e88ea78249dc14, type: 3}
-  - {fileID: 986839162910194721, guid: 737a3a4e0ec4c7241b3639cb236995a8, type: 3}
+  - {fileID: 5578233696187296500, guid: 09be702bce57ccf489b48ba41522b99e, type: 3}
+  - {fileID: 4267113002676330657, guid: 689d2ec78266e7e4ea90275ff35327b3, type: 3}
   spawnTank: {fileID: 740112614}
+  balaNPCPrefab: {fileID: 5919220286410709334, guid: 88a4817108823dc4ea568a53a082e993, type: 3}
+  puntoDisparo: {fileID: 649174066}
+  cadenciaDisparo: 1.5
+--- !u!114 &878691777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878691763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ab1b5a6dc7ecd42bfb31b6eb7e5162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 3
+  damageSound: {fileID: 0}
+  deathSound: {fileID: 0}
 --- !u!1001 &882650473
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18498,7 +18521,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1010714309
 RectTransform:
   m_ObjectHideFlags: 0
@@ -24579,6 +24602,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8716346146874879422, guid: 86f0a2b153e2c134bbbea7ff30d96016, type: 3}
       insertIndex: -1
       addedObject: {fileID: 878691774}
+    - targetCorrespondingSourceObject: {fileID: 8716346146874879422, guid: 86f0a2b153e2c134bbbea7ff30d96016, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 878691777}
   m_SourcePrefab: {fileID: 100100000, guid: 86f0a2b153e2c134bbbea7ff30d96016, type: 3}
 --- !u!1001 &1795457106
 PrefabInstance:
@@ -26197,6 +26223,7 @@ GameObject:
   - component: {fileID: 1991643646}
   - component: {fileID: 1991643647}
   - component: {fileID: 1991643648}
+  - component: {fileID: 1991643649}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -26292,9 +26319,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tanks:
   - {fileID: 6227000609765206360, guid: 0f73ed5ac162fef4997a3a89fa2c26c8, type: 3}
-  - {fileID: 7009760897911128419, guid: 737a3a4e0ec4c7241b3639cb236995a8, type: 3}
+  - {fileID: 6323489499106450915, guid: 689d2ec78266e7e4ea90275ff35327b3, type: 3}
   TankSelected: {fileID: 740112614}
   SpawnPoint: {fileID: 740112614}
+--- !u!114 &1991643649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991643642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164c55fb55afa0745a836167a54c9f6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tanques:
+  - {fileID: 1343440430169775344, guid: 0f73ed5ac162fef4997a3a89fa2c26c8, type: 3}
+  - {fileID: 6674791588785400284, guid: 689d2ec78266e7e4ea90275ff35327b3, type: 3}
+  puntosSpawn:
+  - {fileID: 740112615}
+  vidasJugador: 3
+  monedas: 0
+  tiempoRespawn: 0
+  vidasUI:
+  - {fileID: 1941383731}
+  - {fileID: 1030837055}
+  - {fileID: 67363138}
+  - {fileID: 334178577}
+  - {fileID: 1010714310}
+  textoMonedas: {fileID: 350445000}
 --- !u!1001 &1999726859
 PrefabInstance:
   m_ObjectHideFlags: 0

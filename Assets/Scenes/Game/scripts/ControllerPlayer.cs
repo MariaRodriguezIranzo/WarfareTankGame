@@ -1,38 +1,35 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using UnityEngine.UI;
 
 public class ControllerPlayer : MonoBehaviour
 {
     public int health = 5;
-    
-    public GameObject[] hearts;
+    public GameObject[] hearts; // Asignar los corazones en inspector
     private Animator animator;
-    public AudioClip damageSound;  // Sonido de daño
-    public AudioClip deathSound;   // Sonido de muerte
+    public AudioClip damageSound;
+    public AudioClip deathSound;
     private AudioSource audioSource;
 
     void Start()
     {
-       
         animator = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>(); // Obtén el componente AudioSource
-
+        audioSource = GetComponent<AudioSource>();
+        ActualizarHeartsUI();
     }
 
     private void Die()
     {
         Debug.Log("Player ha muerto.");
 
-        // Reproduce sonido de muerte
         if (audioSource != null && deathSound != null)
         {
-            audioSource.PlayOneShot(deathSound);  // Reproduce el sonido de muerte
+            audioSource.PlayOneShot(deathSound);
         }
 
         StartCoroutine(PlayDeathAnimation());
     }
+
     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("NPC"))
@@ -40,6 +37,7 @@ public class ControllerPlayer : MonoBehaviour
             StartCoroutine(RecibirDaño());
         }
     }
+
     private IEnumerator PlayDeathAnimation()
     {
         if (animator != null)
@@ -47,53 +45,52 @@ public class ControllerPlayer : MonoBehaviour
             animator.SetBool("Die", true);
             yield return new WaitForSeconds(1.5f);
         }
-
     }
 
     public IEnumerator RecibirDaño()
     {
         if (health > 1)
         {
-            health -= 1;
+            health--;
             Debug.Log($"Player recibió daño. Vida restante: {health}");
+
+            if (audioSource != null && damageSound != null)
+            {
+                audioSource.PlayOneShot(damageSound);
+            }
+
+            ActualizarHeartsUI();
         }
         else
         {
-            health -= 1;
-            for (int i = 5; i >= 0; i--)
-            {
-                hearts[i].SetActive(i == health);
-            }
+            health--;
+            ActualizarHeartsUI();
             animator.SetBool("Die", true);
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(2f);
             SceneManager.LoadScene("GameOver");
         }
 
-        // Actualizar HUD
-        for (int i = 5; i >= 0; i--)
-        {
-            hearts[i].SetActive(i == health);
-        }
-
-        yield return null; // Sin esperar, para permitir que el jugador reciba daño inmediatamente.
+        yield return null;
     }
 
+    void ActualizarHeartsUI()
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            hearts[i].SetActive(i < health);
+        }
+    }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Heal"))
         {
-            if (health < 5)
+            if (health < hearts.Length)
             {
-                health += 1;
-                for (int i = 0; i < 6; i++)
-                {
-
-                    hearts[i].SetActive(i == health);
-                } 
+                health++;
+                ActualizarHeartsUI();
                 Destroy(other.gameObject);
             }
-           
         }
     }
 }

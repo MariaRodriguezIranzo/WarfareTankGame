@@ -1,14 +1,47 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public VidaTanque[] tanques;  // Asigna todos los tanques aquí en el inspector
-    public Transform[] puntosSpawn; // Los spawn points en la escena
-    public int vidasJugador = 3; // Vidas que tiene el jugador (mínimo 0)
-    public int monedas = 0; // Monedas acumuladas
+    public VidaTanque[] tanques;         // No tocar desde el Inspector
+    public Transform[] puntosSpawn;      // Asignar en Inspector
 
+    public int vidasJugador = 3;
+    public int monedas = 0;
     public float tiempoRespawn = 3f;
+
+    [Header("UI")]
+    public Image[] vidasUI;              // Corazones (hasta 5)
+    public TextMeshProUGUI textoMonedas;
+
+    private bool tanqueRegistrado = false;
+
+    void Start()
+    {
+        StartCoroutine(EsperarYRegistrarTanque());
+        ActualizarHUDVidas();
+        ActualizarUIMonedas();
+    }
+
+    IEnumerator EsperarYRegistrarTanque()
+    {
+        // Espera hasta que el TankSpawner instancie el tanque
+        while (!tanqueRegistrado)
+        {
+            VidaTanque tanqueInstanciado = FindObjectOfType<VidaTanque>();
+            if (tanqueInstanciado != null)
+            {
+                tanques = new VidaTanque[] { tanqueInstanciado };
+                tanqueInstanciado.OnTanqueMuerto += () => TanqueMuerto(tanqueInstanciado);
+                tanqueRegistrado = true;
+                Debug.Log("[GameManager] Tanque registrado correctamente.");
+            }
+            yield return null;
+        }
+    }
 
     public void TanqueMuerto(VidaTanque tanque)
     {
@@ -16,23 +49,52 @@ public class GameManager : MonoBehaviour
 
         if (vidasJugador <= 0)
         {
-            Debug.Log("Juego terminado. Se acabaron las vidas.");
-            // Aquí puedes hacer lo que quieras, tipo game over, reiniciar, etc.
+            Debug.Log("Game Over");
+            SceneManager.LoadScene("GameOver");
+            ActualizarHUDVidas();
             return;
         }
 
-        // Espera un tiempo y respawnea el tanque
+        ActualizarHUDVidas();
         StartCoroutine(RespawnTanque(tanque));
     }
 
     IEnumerator RespawnTanque(VidaTanque tanque)
     {
         yield return new WaitForSeconds(tiempoRespawn);
-
-        // Elige un spawn random
-        Vector3 spawnPos = puntosSpawn[Random.Range(0, puntosSpawn.Length)].position;
-        tanque.Respawnear(spawnPos);
+        Vector3 spawn = puntosSpawn[Random.Range(0, puntosSpawn.Length)].position;
+        tanque.Respawn(spawn);
     }
 
-    // Aquí podrías añadir métodos para sumar monedas, comprar vidas, etc.
+    public void AñadirMonedas(int cantidad)
+    {
+        monedas += cantidad;
+        ActualizarUIMonedas();
+    }
+
+    public bool ComprarVida()
+    {
+        if (monedas >= 5 && vidasJugador < 5)
+        {
+            monedas -= 5;
+            vidasJugador++;
+            ActualizarUIMonedas();
+            ActualizarHUDVidas();
+            return true;
+        }
+        return false;
+    }
+
+    void ActualizarHUDVidas()
+    {
+        for (int i = 0; i < vidasUI.Length; i++)
+        {
+            vidasUI[i].enabled = i < vidasJugador;
+        }
+    }
+
+    void ActualizarUIMonedas()
+    {
+        textoMonedas.text = monedas.ToString();
+    }
 }

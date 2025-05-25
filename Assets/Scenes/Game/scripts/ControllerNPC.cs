@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ControllerNPC : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class ControllerNPC : MonoBehaviour
         if (currentHealth <= 0)
         {
             Die();
+            //SceneManager.LoadScene("WIN");
         }
     }
 

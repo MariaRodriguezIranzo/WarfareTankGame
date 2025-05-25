@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
+using System.Collections;
 
 public class NPCFSM : MonoBehaviour
 {
@@ -26,6 +27,12 @@ public class NPCFSM : MonoBehaviour
     public GameObject spawnTank;
 
     private NavMeshAgent agent;
+
+    [Header("Disparo")]
+    public GameObject balaNPCPrefab;
+    public Transform puntoDisparo;
+    public float cadenciaDisparo = 1.5f;
+    private bool puedeDisparar = true;
 
     void Start()
     {
@@ -167,6 +174,16 @@ public class NPCFSM : MonoBehaviour
         {
             agent.isStopped = false;
             agent.SetDestination(targetPlayer.position);
+
+            // Apuntar hacia el jugador
+            Vector3 direction = (targetPlayer.position - transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+
+            if (puedeDisparar)
+            {
+                Disparar();
+            }
         }
     }
 
@@ -226,6 +243,22 @@ public class NPCFSM : MonoBehaviour
         {
             agent.Move(awayDir * Time.deltaTime * agent.speed);
         }
+    }
+
+    void Disparar()
+    {
+        if (balaNPCPrefab != null && puntoDisparo != null)
+        {
+            Instantiate(balaNPCPrefab, puntoDisparo.position, puntoDisparo.rotation);
+            puedeDisparar = false;
+            StartCoroutine(TemporizadorDisparo());
+        }
+    }
+
+    IEnumerator TemporizadorDisparo()
+    {
+        yield return new WaitForSeconds(cadenciaDisparo);
+        puedeDisparar = true;
     }
 
     void OnDrawGizmosSelected()

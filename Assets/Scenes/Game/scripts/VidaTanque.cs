@@ -1,43 +1,64 @@
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class VidaTanque : MonoBehaviour
 {
-    public int vidaMaxima = 100;
-    public int vidaActual;
+    public float vidaMaxima = 300f;
+    private float vidaActual;
 
-    private GameManager gameManager;
+    [Header("Barra de Vida")]
+    public Slider barraDeVida;
+
+    public System.Action OnTanqueMuerto;
 
     void Start()
     {
         vidaActual = vidaMaxima;
-        gameManager = FindObjectOfType<GameManager>();
+        ActualizarUI();
     }
 
-    public void RecibirDanio(int danio)
+    public void RecibirDaño(float daño)
     {
-        vidaActual -= danio;
+        Debug.Log($"💥 Tanque recibe {daño} de daño");
+        vidaActual -= daño;
+        vidaActual = Mathf.Clamp(vidaActual, 0, vidaMaxima);
+        ActualizarUI();
+
         if (vidaActual <= 0)
         {
-            vidaActual = 0;
             Morir();
+        }
+    }
+
+    public void Curar(float cantidad)
+    {
+        vidaActual += cantidad;
+        vidaActual = Mathf.Clamp(vidaActual, 0, vidaMaxima);
+        ActualizarUI();
+    }
+
+    void ActualizarUI()
+    {
+        if (barraDeVida != null)
+        {
+            barraDeVida.maxValue = vidaMaxima;
+            barraDeVida.value = vidaActual;
         }
     }
 
     void Morir()
     {
-        // Desactiva el tanque temporalmente
+        Debug.Log("☠️ Tanque ha muerto");
+        OnTanqueMuerto?.Invoke();
         gameObject.SetActive(false);
-
-        // Notifica al GameManager que muri� este tanque
-        if (gameManager != null)
-            gameManager.TanqueMuerto(this);
     }
 
-    public void Respawnear(Vector3 posicion)
+    public void Respawn(Vector3 posicion)
     {
+        Debug.Log("🔄 Respawn del tanque en: " + posicion);
         transform.position = posicion;
         vidaActual = vidaMaxima;
+        ActualizarUI();
         gameObject.SetActive(true);
     }
 }

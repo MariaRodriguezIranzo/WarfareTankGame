@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems; // Necesario para manejar UI
+
 
 public class PauseManager : MonoBehaviour
 {
@@ -39,10 +39,6 @@ public class PauseManager : MonoBehaviour
         isPaused = true;
         Cursor.lockState = CursorLockMode.None; // Muestra el cursor para el UI
         Cursor.visible = true;
-
-        // Seleccionar el primer botón del menú de pausa (para que pueda recibir input)
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(pauseMenuUI.GetComponentInChildren<UnityEngine.UI.Button>().gameObject);
     }
 
     public void LoadMenu()

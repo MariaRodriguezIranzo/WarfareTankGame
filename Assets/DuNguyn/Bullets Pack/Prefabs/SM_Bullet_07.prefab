@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2909988103197671830}
   - component: {fileID: 8672016882881898459}
   - component: {fileID: 3774897151290494892}
+  - component: {fileID: 4373619030859000268}
   - component: {fileID: 2232372183008587548}
   m_Layer: 0
   m_Name: SM_Bullet_07
@@ -83,6 +84,29 @@ CapsuleCollider:
   serializedVersion: 2
   m_Radius: 0.12399447
   m_Height: 0.57701874
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &4373619030859000268
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5919220286410709334}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1239945
+  m_Height: 0.5770187
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2232372183008587548

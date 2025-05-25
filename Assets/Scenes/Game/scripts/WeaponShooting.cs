@@ -11,7 +11,7 @@ public class WeaponShooting : MonoBehaviour
     private int currentAmmo;
     public float reloadTime = 14; 
     private bool isReloading = false;
-    public TextMeshProUGUI normalText;
+
     public AudioSource audioSource;
     public AudioClip shootSound;
     public AudioClip reloadSound;
@@ -19,7 +19,9 @@ public class WeaponShooting : MonoBehaviour
     void Start()
     {
         currentAmmo = maxAmmo;
-        UpdateAmmoText();
+        AmmoUI.instance?.UpdateAmmoText(currentAmmo, maxAmmo);
+
+
     }
 
     void Update()
@@ -34,7 +36,7 @@ public class WeaponShooting : MonoBehaviour
             StartCoroutine(Reload());
         }
 
-        UpdateAmmoText();
+        
     }
 
     void Shoot()
@@ -52,6 +54,7 @@ public class WeaponShooting : MonoBehaviour
         {
             rb.velocity = firePoint.forward * bulletSpeed;
         }
+        AmmoUI.instance?.UpdateAmmoText(currentAmmo, maxAmmo);
     }
 
     private IEnumerator Reload()
@@ -72,13 +75,8 @@ public class WeaponShooting : MonoBehaviour
         // Restaura la munición y termina la recarga
         currentAmmo = maxAmmo;
         isReloading = false;
+        AmmoUI.instance?.UpdateAmmoText(currentAmmo, maxAmmo);
     }
 
-    private void UpdateAmmoText()
-    {
-        if (normalText != null)
-        {
-            normalText.text = currentAmmo + "/" + maxAmmo;
-        }
-    }
+    
 }

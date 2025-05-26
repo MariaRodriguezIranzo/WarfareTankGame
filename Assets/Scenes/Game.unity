@@ -17612,7 +17612,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 878691763}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0338ba1f9dbce94bb4068ad152ac46c, type: 3}
   m_Name: 
@@ -17631,7 +17631,7 @@ MonoBehaviour:
   minDistanciaHuida: 35
   distanciaBuffer: 35
   players:
-  - {fileID: 5578233696187296500, guid: 09be702bce57ccf489b48ba41522b99e, type: 3}
+  - {fileID: 4267113002676330657, guid: 9f2ae14018dd5e043bbee4138b190038, type: 3}
   - {fileID: 4267113002676330657, guid: 689d2ec78266e7e4ea90275ff35327b3, type: 3}
   spawnTank: {fileID: 740112614}
   balaNPCPrefab: {fileID: 5919220286410709334, guid: 88a4817108823dc4ea568a53a082e993, type: 3}
@@ -17652,6 +17652,35 @@ MonoBehaviour:
   maxHealth: 3
   damageSound: {fileID: 0}
   deathSound: {fileID: 0}
+--- !u!114 &878691780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878691763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a68ec1ddb9dff4542a85954fbc25ce1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  waypoints:
+  - {fileID: 1851516605}
+  - {fileID: 1339515098}
+  - {fileID: 1288709723}
+  - {fileID: 1577745648}
+  - {fileID: 1744358078}
+  detectionDistance: 10
+  huidaDistance: 35
+  distanciaParaHuir: 35
+  distanciaJugadorCercano: 4
+  minDistanciaHuida: 35
+  distanciaBuffer: 35
+  players:
+  - {fileID: 4267113002676330657, guid: 9f2ae14018dd5e043bbee4138b190038, type: 3}
+  - {fileID: 4267113002676330657, guid: 689d2ec78266e7e4ea90275ff35327b3, type: 3}
+  spawnTank: {fileID: 740112614}
 --- !u!1001 &882650473
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24605,6 +24634,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8716346146874879422, guid: 86f0a2b153e2c134bbbea7ff30d96016, type: 3}
       insertIndex: -1
       addedObject: {fileID: 878691777}
+    - targetCorrespondingSourceObject: {fileID: 8716346146874879422, guid: 86f0a2b153e2c134bbbea7ff30d96016, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 878691780}
   m_SourcePrefab: {fileID: 100100000, guid: 86f0a2b153e2c134bbbea7ff30d96016, type: 3}
 --- !u!1001 &1795457106
 PrefabInstance:
@@ -26318,7 +26350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tanks:
-  - {fileID: 6227000609765206360, guid: 0f73ed5ac162fef4997a3a89fa2c26c8, type: 3}
+  - {fileID: 6323489499106450915, guid: 9f2ae14018dd5e043bbee4138b190038, type: 3}
   - {fileID: 6323489499106450915, guid: 689d2ec78266e7e4ea90275ff35327b3, type: 3}
   TankSelected: {fileID: 740112614}
   SpawnPoint: {fileID: 740112614}
@@ -26335,7 +26367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tanques:
-  - {fileID: 1343440430169775344, guid: 0f73ed5ac162fef4997a3a89fa2c26c8, type: 3}
+  - {fileID: 6674791588785400284, guid: 9f2ae14018dd5e043bbee4138b190038, type: 3}
   - {fileID: 6674791588785400284, guid: 689d2ec78266e7e4ea90275ff35327b3, type: 3}
   puntosSpawn:
   - {fileID: 740112615}

@@ -353,7 +353,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4267113002676330657
 Transform:
   m_ObjectHideFlags: 0
@@ -469,7 +469,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vidaMaxima: 300
   barraDeVida: {fileID: 8867590734853302387}
-  esJugador: 0
 --- !u!1 &8631877459200575968
 GameObject:
   m_ObjectHideFlags: 0

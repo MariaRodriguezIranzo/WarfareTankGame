@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -6,16 +6,21 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public VidaTanque[] tanques;         // No tocar desde el Inspector
-    public Transform[] puntosSpawn;      // Asignar en Inspector
+    private const int MAX_VIDAS = 5;
+
+    public VidaTanque[] tanques;
+    public Transform[] puntosSpawn;
 
     public int vidasJugador = 3;
     public int monedas = 0;
     public float tiempoRespawn = 3f;
 
     [Header("UI")]
-    public Image[] vidasUI;              // Corazones (hasta 5)
+    public TextMeshProUGUI textoVidas;         
     public TextMeshProUGUI textoMonedas;
+
+    [Header("UI Revivir")]
+    public GameObject reviviendoUI;            
 
     private bool tanqueRegistrado = false;
 
@@ -28,7 +33,6 @@ public class GameManager : MonoBehaviour
 
     IEnumerator EsperarYRegistrarTanque()
     {
-        // Espera hasta que el TankSpawner instancie el tanque
         while (!tanqueRegistrado)
         {
             VidaTanque tanqueInstanciado = FindObjectOfType<VidaTanque>();
@@ -61,12 +65,21 @@ public class GameManager : MonoBehaviour
 
     IEnumerator RespawnTanque(VidaTanque tanque)
     {
+        // Mostrar panel de "Reviviendo..."
+        if (reviviendoUI != null)
+            reviviendoUI.SetActive(true);
+
         yield return new WaitForSeconds(tiempoRespawn);
+
         Vector3 spawn = puntosSpawn[Random.Range(0, puntosSpawn.Length)].position;
         tanque.Respawn(spawn);
+
+        // Ocultar panel de "Reviviendo..."
+        if (reviviendoUI != null)
+            reviviendoUI.SetActive(false);
     }
 
-    public void A�adirMonedas(int cantidad)
+    public void AñadirMonedas(int cantidad)
     {
         monedas += cantidad;
         ActualizarUIMonedas();
@@ -74,10 +87,10 @@ public class GameManager : MonoBehaviour
 
     public bool ComprarVida()
     {
-        if (monedas >= 5 && vidasJugador < 5)
+        if (monedas >= 5 && vidasJugador < MAX_VIDAS)
         {
             monedas -= 5;
-            vidasJugador++;
+            vidasJugador = Mathf.Clamp(vidasJugador + 1, 0, MAX_VIDAS);
             ActualizarUIMonedas();
             ActualizarHUDVidas();
             return true;
@@ -87,10 +100,7 @@ public class GameManager : MonoBehaviour
 
     void ActualizarHUDVidas()
     {
-        for (int i = 0; i < vidasUI.Length; i++)
-        {
-            vidasUI[i].enabled = i < vidasJugador;
-        }
+        textoVidas.text = vidasJugador.ToString();
     }
 
     void ActualizarUIMonedas()

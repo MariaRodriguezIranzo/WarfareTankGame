@@ -46,14 +46,19 @@ public class ControllerNPC : MonoBehaviour
     {
         Debug.Log("NPC ha muerto.");
 
-        // Reproduce sonido de muerte
         if (audioSource != null && deathSound != null)
         {
-            audioSource.PlayOneShot(deathSound);  // Reproduce el sonido de muerte
+            audioSource.PlayOneShot(deathSound);
         }
 
         StartCoroutine(PlayDeathAnimation());
+
+        if (NPCManager.instance != null)
+        {
+            NPCManager.instance.NPCMuerto();
+        }
     }
+
 
     private IEnumerator PlayDeathAnimation()
     {

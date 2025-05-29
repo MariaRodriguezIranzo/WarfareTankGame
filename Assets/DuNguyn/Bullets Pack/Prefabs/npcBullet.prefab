@@ -123,7 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletSpeed: 10
   lifetime: 2
-  damage: 150
+  damage: 400
   shootingSound: {fileID: 0}
 --- !u!1 &8048810760565586807
 GameObject:

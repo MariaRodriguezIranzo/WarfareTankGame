@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using TMPro;
 
@@ -9,7 +9,7 @@ public class WeaponShooting : MonoBehaviour
     public float bulletSpeed = 20f;
     public int maxAmmo = 10;
     private int currentAmmo;
-    public float reloadTime = 14; 
+    public float reloadTime = 14f;
     private bool isReloading = false;
 
     public AudioSource audioSource;
@@ -20,12 +20,11 @@ public class WeaponShooting : MonoBehaviour
     {
         currentAmmo = maxAmmo;
         AmmoUI.instance?.UpdateAmmoText(currentAmmo, maxAmmo);
-
-
     }
 
     void Update()
     {
+
         if (Input.GetButtonDown("Fire1") && currentAmmo > 0 && !isReloading)
         {
             Shoot();
@@ -35,8 +34,6 @@ public class WeaponShooting : MonoBehaviour
         {
             StartCoroutine(Reload());
         }
-
-        
     }
 
     void Shoot()
@@ -61,22 +58,17 @@ public class WeaponShooting : MonoBehaviour
     {
         isReloading = true;
 
-        // Reproducimos el sonido de recarga una sola vez
         if (audioSource && reloadSound)
         {
-            audioSource.loop = false; // Asegurar que no está en loop
+            audioSource.loop = false;
             audioSource.PlayOneShot(reloadSound);
             reloadTime = reloadSound.length;
         }
 
-        // Esperamos el tiempo de recarga
         yield return new WaitForSeconds(reloadTime);
 
-        // Restaura la munición y termina la recarga
         currentAmmo = maxAmmo;
         isReloading = false;
         AmmoUI.instance?.UpdateAmmoText(currentAmmo, maxAmmo);
     }
-
-    
 }

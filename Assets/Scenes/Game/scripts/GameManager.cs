@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance; // Singleton
+
     private const int MAX_VIDAS = 5;
 
     public VidaTanque[] tanques;
@@ -13,16 +15,33 @@ public class GameManager : MonoBehaviour
 
     public int vidasJugador = 3;
     public int monedas = 0;
+    public int precioVida = 5; // Precio para comprar vida, editable en inspector
     public float tiempoRespawn = 3f;
 
     [Header("UI")]
-    public TextMeshProUGUI textoVidas;         
+    public TextMeshProUGUI textoVidas;
     public TextMeshProUGUI textoMonedas;
 
     [Header("UI Revivir")]
-    public GameObject reviviendoUI;            
+    public GameObject reviviendoUI;
 
     private bool tanqueRegistrado = false;
+
+    public bool mercadoAbierto = false;
+
+    void Awake()
+    {
+        // Singleton pattern
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -65,7 +84,6 @@ public class GameManager : MonoBehaviour
 
     IEnumerator RespawnTanque(VidaTanque tanque)
     {
-        // Mostrar panel de "Reviviendo..."
         if (reviviendoUI != null)
             reviviendoUI.SetActive(true);
 
@@ -74,7 +92,6 @@ public class GameManager : MonoBehaviour
         Vector3 spawn = puntosSpawn[Random.Range(0, puntosSpawn.Length)].position;
         tanque.Respawn(spawn);
 
-        // Ocultar panel de "Reviviendo..."
         if (reviviendoUI != null)
             reviviendoUI.SetActive(false);
     }
@@ -87,9 +104,9 @@ public class GameManager : MonoBehaviour
 
     public bool ComprarVida()
     {
-        if (monedas >= 5 && vidasJugador < MAX_VIDAS)
+        if (monedas >= precioVida && vidasJugador < MAX_VIDAS)
         {
-            monedas -= 5;
+            monedas -= precioVida;
             vidasJugador = Mathf.Clamp(vidasJugador + 1, 0, MAX_VIDAS);
             ActualizarUIMonedas();
             ActualizarHUDVidas();
@@ -100,11 +117,13 @@ public class GameManager : MonoBehaviour
 
     void ActualizarHUDVidas()
     {
-        textoVidas.text = vidasJugador.ToString();
+        if (textoVidas != null)
+            textoVidas.text = vidasJugador.ToString();
     }
 
     void ActualizarUIMonedas()
     {
-        textoMonedas.text = monedas.ToString();
+        if (textoMonedas != null)
+            textoMonedas.text = monedas.ToString();
     }
 }

@@ -189,7 +189,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4285875440
-  m_fontColor: {r: 0.94117653, g: 0.26666668, b: 0.45882356, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -654,12 +654,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textDisplay: {fileID: 189443643}
   typingSpeed: 0.05
-  fullText: "MISION FALLIDA\n\nEl intento de rescate de Bluefire fracas\xF3. Peter,
-    aprovechando la confusi\xF3n, logr\xF3 capturarlo nuevamente y lo llev\xF3 a
-    Linton, donde lo usar\xE1 para protegerse de la polic\xEDa. Bluefire ahora est\xE1
-    en manos equivocadas, y Peter planea mantenerlo bajo su control para evitar que
-    su relaci\xF3n con el narcotr\xE1fico salga a la luz.\n\nEl rescate ha fallado,
-    y las consecuencias de esta derrota podr\xEDan ser m\xE1s graves de lo que parece."
+  fullText: '
+
+    GAME OVER
+
+
+    PLAY AGAIN AND TRY TO OVERCOME ALL THE ENEMIES
+
+'
 --- !u!1 &1234463281
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,7 +919,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: ebb73cb829c6aa64a8151287ee70daa6, type: 3}
+  m_Texture: {fileID: 2800000, guid: 18a46cc975df6be41a91bf33435a083e, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1171,11 +1173,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: ad4754e5a5a595c4dab6a9b922324930, type: 3}
+  m_audioClip: {fileID: 8300000, guid: cbd869cda47883e408c272ea89c24a77, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

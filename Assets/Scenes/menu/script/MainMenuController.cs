@@ -18,12 +18,6 @@ public class MainMenuController : MonoBehaviour
         SceneManager.LoadScene("CreditsScene");
     }
 
-    public void OnOptionssButtonClick()
-    {
-        // Cambiar a la escena de créditos
-        SceneManager.LoadScene("OptiosScene");
-    }
-
     // Función para salir del juego
     public void OnExitButtonClick()
     {

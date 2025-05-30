@@ -12,9 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/CreditsScene.unity
     guid: 069ae36f0a8968343afcdee77e3d02cd
   - enabled: 1
-    path: Assets/Scenes/OptiosScene.unity
-    guid: ded42902016e07146abbba3d10ae1ee9
-  - enabled: 1
     path: Assets/Scenes/SelectTank.unity
     guid: 55472f3695d1a9b478cb0c8991267707
   - enabled: 1

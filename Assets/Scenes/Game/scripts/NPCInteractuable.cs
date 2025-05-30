@@ -1,29 +1,39 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 using System.Linq;
 
 public class NPCInteractuable : MonoBehaviour
 {
+    [Header("Waypoints")]
+    public Transform[] waypoints;
+    private int waypointIndex = 0;
+    private bool esperandoEnWaypoint = false;
+
+    [Header("InteracciÃ³n")]
     public int monedasQueDa = 5;
     public float distanciaInteraccion = 3f;
-    public GameObject textoInteraccionUI;
-
-    private Transform[] jugadores;
-    private Transform jugadorCercano;
-    private bool jugadorCerca = false;
-    private bool modoDiablo = false;
-
-    [Header("Interacción")]
     public int maxInteracciones = 3;
     private int contadorInteracciones = 0;
+    public GameObject textoInteraccionUI;
 
-    [Header("Ataque")]
+    [Header("DetecciÃ³n y ataque")]
+    public float rangoDeteccion = 10f;
     public GameObject balaPrefab;
     public Transform puntoDisparo;
     public float cadenciaDisparo = 1.5f;
     private bool puedeDisparar = true;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip sonidoCompra;
+
+    private Transform jugadorCercano;
     private NavMeshAgent agent;
+
+    private bool modoDiabloActivo = false;
+    private bool estadoHostilPermanente = false;
+    private bool jugadorDetectado = false;
 
     void Start()
     {
@@ -31,102 +41,85 @@ public class NPCInteractuable : MonoBehaviour
         if (textoInteraccionUI != null)
             textoInteraccionUI.SetActive(false);
 
-        ActualizarJugadores();
+        StartCoroutine(Patrullar());
     }
 
     void Update()
     {
-        ActualizarJugadores();
-        jugadorCercano = ObtenerJugadorCercano();
+        ActualizarJugadorCercano();
 
-        if (jugadorCercano != null)
+        float distancia = jugadorCercano != null ? Vector3.Distance(transform.position, jugadorCercano.position) : Mathf.Infinity;
+
+        jugadorDetectado = jugadorCercano != null && distancia <= rangoDeteccion;
+
+        if (!estadoHostilPermanente && jugadorDetectado && !modoDiabloActivo)
         {
-            float distancia = Vector3.Distance(transform.position, jugadorCercano.position);
-            jugadorCerca = distancia <= distanciaInteraccion;
+            textoInteraccionUI.SetActive(true);
 
-            if (jugadorCerca && !modoDiablo)
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                textoInteraccionUI.SetActive(true);
-
-                if (Input.GetKeyDown(KeyCode.E))
+                if (contadorInteracciones < maxInteracciones)
                 {
-                    if (contadorInteracciones < maxInteracciones)
-                    {
-                        Interactuar();
-                    }
-                    else
-                    {
-                        ActivarModoDiablo();
-                    }
+                    Interactuar();
                 }
-            }
-            else
-            {
-                textoInteraccionUI.SetActive(false);
-            }
-
-            if (modoDiablo)
-            {
-                PerseguirJugador(jugadorCercano);
+                else
+                {
+                    StartCoroutine(ActivarModoDiablo());
+                }
             }
         }
         else
         {
             textoInteraccionUI.SetActive(false);
         }
+
+        if ((modoDiabloActivo || estadoHostilPermanente) && jugadorDetectado)
+        {
+            PerseguirJugador(jugadorCercano);
+        }
     }
 
-    void ActualizarJugadores()
+    void ActualizarJugadorCercano()
     {
         GameObject[] playersGO = GameObject.FindGameObjectsWithTag("Player");
-        jugadores = playersGO.Select(go => go.transform).ToArray();
-    }
+        if (playersGO.Length == 0) { jugadorCercano = null; return; }
 
-    Transform ObtenerJugadorCercano()
-    {
-        if (jugadores == null || jugadores.Length == 0) return null;
-
-        Transform jugadorMasCercano = null;
-        float minDist = Mathf.Infinity;
-
-        foreach (var jugador in jugadores)
-        {
-            if (jugador == null) continue;
-            float dist = Vector3.Distance(transform.position, jugador.position);
-            if (dist < minDist)
-            {
-                minDist = dist;
-                jugadorMasCercano = jugador;
-            }
-        }
-        return jugadorMasCercano;
+        jugadorCercano = playersGO
+            .Select(go => go.transform)
+            .OrderBy(t => Vector3.Distance(transform.position, t.position))
+            .FirstOrDefault();
     }
 
     void Interactuar()
     {
         contadorInteracciones++;
-        Debug.Log($"Interacción {contadorInteracciones} de {maxInteracciones}");
+        Debug.Log($"InteracciÃ³n {contadorInteracciones} de {maxInteracciones}");
 
         GameManager gm = FindObjectOfType<GameManager>();
         if (gm != null)
         {
-            gm.AñadirMonedas(monedasQueDa);
+            gm.AÃ±adirMonedas(monedasQueDa);
+
+            if (audioSource != null && sonidoCompra != null)
+            {
+                audioSource.PlayOneShot(sonidoCompra);
+            }
         }
     }
 
-    void ActivarModoDiablo()
+    IEnumerator ActivarModoDiablo()
     {
-        modoDiablo = true;
+        if (modoDiabloActivo || estadoHostilPermanente) yield break;
+
+        modoDiabloActivo = true;
         textoInteraccionUI.SetActive(false);
-        Debug.Log("¡Modo diablo activado por exceso de interacciones!");
-    }
+        Debug.Log("ðŸ”´ Â¡Modo Diablo ACTIVADO por 5 segundos!");
 
-    public void TomarDaño()
-    {
-        if (!modoDiablo)
-        {
-            ActivarModoDiablo();
-        }
+        yield return new WaitForSeconds(5f);
+
+        modoDiabloActivo = false;
+        estadoHostilPermanente = true;
+        Debug.Log("ðŸŸ¡ NPC entra en estado Hostil Permanente. Patrulla sin pausas y ataca al jugador si lo ve.");
     }
 
     void PerseguirJugador(Transform jugador)
@@ -160,9 +153,34 @@ public class NPCInteractuable : MonoBehaviour
         puedeDisparar = true;
     }
 
+    IEnumerator Patrullar()
+    {
+        while (true)
+        {
+            if (!jugadorDetectado && !modoDiabloActivo)
+            {
+                agent.SetDestination(waypoints[waypointIndex].position);
+
+                if (Vector3.Distance(transform.position, waypoints[waypointIndex].position) < 1f)
+                {
+                    if (!estadoHostilPermanente)
+                    {
+                        esperandoEnWaypoint = true;
+                        yield return new WaitForSeconds(15f);
+                        esperandoEnWaypoint = false;
+                    }
+
+                    waypointIndex = (waypointIndex + 1) % waypoints.Length;
+                }
+            }
+
+            yield return null;
+        }
+    }
+
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, distanciaInteraccion);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, rangoDeteccion);
     }
 }

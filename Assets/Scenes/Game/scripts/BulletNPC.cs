@@ -6,24 +6,30 @@ public class EnemyBullet : MonoBehaviour
     public float lifetime = 2f;
     public int damage = 1;
     private Rigidbody rb;
+
+    [Header("Audio")] 
+    public AudioSource audioSource;
     public AudioClip shootingSound;
-    private AudioSource audioSource;
+   
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        audioSource = GetComponent<AudioSource>();
 
         if (rb == null)
         {
-            Debug.LogError("Falta Rigidbody en la bala del NPC!");
+            Debug.LogError("❌ Falta Rigidbody en la bala del NPC!");
             return;
         }
 
-        // Sonido
+        // Sonido de disparo
         if (audioSource != null && shootingSound != null)
         {
             audioSource.PlayOneShot(shootingSound);
+        }
+        else
+        {
+            Debug.LogWarning("🎧 AudioSource o shootingSound no asignado en " + gameObject.name);
         }
 
         rb.velocity = transform.forward * bulletSpeed;

@@ -1,23 +1,51 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ControllerNPC : MonoBehaviour
 {
+    [Header("Vida")]
     public int maxHealth = 3;
     private int currentHealth;
+
+    [Header("Componentes")]
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    public AudioClip damageSound;  // Sonido de daÒo
-    public AudioClip deathSound;    // Sonido de muerte
-    private AudioSource audioSource;
+
+    [Header("Audios")]
+    public AudioSource audioSource;
+    public AudioClip damageSound;
+    public AudioClip deathSound;
+
+    [Header("Comportamiento")]
+    public bool isAlerted = false; // ‚Üê Esto se activa cuando recibe da√±o
+    public float alertDuration = 5f; // ‚Üê Tiempo que persigue tras ser atacado
+    private float alertTimer = 0f;
 
     void Start()
     {
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        audioSource = GetComponent<AudioSource>(); // ObtÈn el componente AudioSource
+
+        if (audioSource == null)
+        {
+            Debug.LogWarning("Falta asignar el AudioSource en el Inspector en " + gameObject.name);
+        }
+    }
+
+    void Update()
+    {
+        if (isAlerted)
+        {
+            alertTimer -= Time.deltaTime;
+
+            if (alertTimer <= 0f)
+            {
+                isAlerted = false;
+                Debug.Log("NPC deja de estar alerta.");
+            }
+        }
     }
 
     public void TakeDamage(int damage)
@@ -25,21 +53,31 @@ public class ControllerNPC : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
-        Debug.Log($"NPC recibiÛ daÒo. Vida restante: {currentHealth}");
+        Debug.Log($"NPC recibi√≥ da√±o. Vida restante: {currentHealth}");
 
-        // Reproduce sonido de daÒo
+        // Sonido de da√±o
         if (audioSource != null && damageSound != null)
         {
-            audioSource.PlayOneShot(damageSound);  // Reproduce el sonido de daÒo
+            audioSource.PlayOneShot(damageSound);
         }
 
-        StartCoroutine(FlashDamageEffect()); // Efecto de cambio de color al recibir daÒo
+        StartCoroutine(FlashDamageEffect());
+
+        // ‚ö†Ô∏è Activar modo alerta
+        ActivarAlerta();
 
         if (currentHealth <= 0)
         {
             Die();
-            //SceneManager.LoadScene("WIN");
         }
+    }
+
+    void ActivarAlerta()
+    {
+        isAlerted = true;
+        alertTimer = alertDuration;
+        Debug.Log("NPC entra en modo alerta. ¬°Busca al jugador!");
+        // Aqu√≠ puedes lanzar animaciones, efectos visuales o notificar a otro script
     }
 
     private void Die()
@@ -59,31 +97,25 @@ public class ControllerNPC : MonoBehaviour
         }
     }
 
-
     private IEnumerator PlayDeathAnimation()
     {
-        // Reproduce la animaciÛn de muerte
         if (animator != null)
         {
             animator.SetTrigger("Die");
-            // Espera la duraciÛn de la animaciÛn de muerte antes de destruir el objeto
-            float deathAnimationDuration = animator.GetCurrentAnimatorStateInfo(0).length;
-            yield return new WaitForSeconds(deathAnimationDuration); // Espera que termine la animaciÛn
+            float duration = animator.GetCurrentAnimatorStateInfo(0).length;
+            yield return new WaitForSeconds(duration);
         }
 
-        // Destruye el objeto despuÈs de la animaciÛn
         Destroy(gameObject);
     }
 
     private IEnumerator FlashDamageEffect()
     {
-        // Aseg˙rate de que el SpriteRenderer estÈ presente
         if (spriteRenderer != null)
         {
-            // Se pone rojo intenso para que se vea el daÒo
             spriteRenderer.color = Color.red;
-            yield return new WaitForSeconds(0.2f); // El rojo durar· 0.2 segundos
-            spriteRenderer.color = Color.white; // Vuelve al color original
+            yield return new WaitForSeconds(0.2f);
+            spriteRenderer.color = Color.white;
         }
     }
 }

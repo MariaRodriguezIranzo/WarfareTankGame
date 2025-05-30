@@ -21,8 +21,8 @@ public class NPCFSM : MonoBehaviour
 
     [Header("Jugadores")]
     public Transform[] players;
-    private Transform targetPlayer;
-    private Transform jugadorPrincipal;
+    public Transform targetPlayer;
+    public Transform jugadorPrincipal;
 
     public GameObject spawnTank;
 
@@ -33,6 +33,11 @@ public class NPCFSM : MonoBehaviour
     public Transform puntoDisparo;
     public float cadenciaDisparo = 1.5f;
     private bool puedeDisparar = true;
+
+    // Control alerta y timer para volver a patrullar
+    private bool isAlertedTimerRunning = false;
+    private float alertaTimer = 0f;
+    public float alertaDuracion = 2f; // segundos que persigue tras alerta
 
     void Start()
     {
@@ -50,6 +55,19 @@ public class NPCFSM : MonoBehaviour
         UpdateTargetPlayerByDistance();
 
         RevisarTransiciones();
+
+        if (isAlertedTimerRunning)
+        {
+            alertaTimer += Time.deltaTime;
+            if (alertaTimer >= alertaDuracion)
+            {
+                currentState = State.Patrullar;
+                agent.isStopped = false;
+                GoToClosestWaypoint(); // Va al waypoint más cercano para patrullar
+                isAlertedTimerRunning = false;
+                alertaTimer = 0f;
+            }
+        }
 
         switch (currentState)
         {
@@ -106,13 +124,31 @@ public class NPCFSM : MonoBehaviour
 
     void RevisarTransiciones()
     {
+        ControllerNPC controller = GetComponent<ControllerNPC>();
+        if (controller != null && controller.isAlerted)
+        {
+            if (jugadorPrincipal != null)
+            {
+                targetPlayer = jugadorPrincipal;
+                currentState = State.Perseguir;
+
+                // Empezar timer para volver a patrullar en 2 segundos
+                if (!isAlertedTimerRunning)
+                {
+                    isAlertedTimerRunning = true;
+                    alertaTimer = 0f;
+                }
+            }
+            return;
+        }
+
         if (jugadorPrincipal == null)
         {
             if (currentState != State.Patrullar)
             {
                 currentState = State.Patrullar;
                 agent.isStopped = false;
-                GoToNextWaypoint();
+                GoToClosestWaypoint();
             }
             return;
         }
@@ -133,7 +169,7 @@ public class NPCFSM : MonoBehaviour
                 {
                     currentState = State.Patrullar;
                     agent.isStopped = false;
-                    GoToNextWaypoint();
+                    GoToClosestWaypoint();
                 }
                 break;
 
@@ -147,7 +183,7 @@ public class NPCFSM : MonoBehaviour
                 {
                     currentState = State.Patrullar;
                     agent.isStopped = false;
-                    GoToNextWaypoint();
+                    GoToClosestWaypoint();
                 }
                 break;
         }
@@ -168,6 +204,27 @@ public class NPCFSM : MonoBehaviour
             agent.SetDestination(waypoints[currentWaypoint].position);
     }
 
+    void GoToClosestWaypoint()
+    {
+        if (waypoints.Length == 0) return;
+
+        float minDist = Mathf.Infinity;
+        int closestIndex = 0;
+
+        for (int i = 0; i < waypoints.Length; i++)
+        {
+            float dist = Vector3.Distance(transform.position, waypoints[i].position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closestIndex = i;
+            }
+        }
+
+        currentWaypoint = closestIndex;
+        agent.SetDestination(waypoints[currentWaypoint].position);
+    }
+
     void Perseguir()
     {
         if (targetPlayer != null)
@@ -175,7 +232,6 @@ public class NPCFSM : MonoBehaviour
             agent.isStopped = false;
             agent.SetDestination(targetPlayer.position);
 
-            // Apuntar hacia el jugador
             Vector3 direction = (targetPlayer.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
@@ -196,15 +252,14 @@ public class NPCFSM : MonoBehaviour
         {
             currentState = State.Patrullar;
             agent.isStopped = false;
-            GoToNextWaypoint();
+            GoToClosestWaypoint();
             return;
         }
 
         Vector3 awayDir = (transform.position - targetPlayer.position).normalized;
         Vector3 escapePos = transform.position + awayDir * (huidaDistance + minDistanciaHuida);
 
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(escapePos, out hit, huidaDistance + 10f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(escapePos, out NavMeshHit hit, huidaDistance + 10f, NavMesh.AllAreas))
         {
             agent.isStopped = false;
             agent.SetDestination(hit.position);
@@ -225,7 +280,7 @@ public class NPCFSM : MonoBehaviour
         {
             currentState = State.Patrullar;
             agent.isStopped = false;
-            GoToNextWaypoint();
+            GoToClosestWaypoint();
             return;
         }
 
@@ -234,8 +289,7 @@ public class NPCFSM : MonoBehaviour
         Vector3 awayDir = (transform.position - jugadorPrincipal.position).normalized;
         Vector3 escapePos = transform.position + awayDir * (huidaDistance + minDistanciaHuida);
 
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(escapePos, out hit, huidaDistance + 10f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(escapePos, out NavMeshHit hit, huidaDistance + 10f, NavMesh.AllAreas))
         {
             agent.SetDestination(hit.position);
         }

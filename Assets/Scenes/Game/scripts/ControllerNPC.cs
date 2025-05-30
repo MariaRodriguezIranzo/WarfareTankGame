@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class ControllerNPC : MonoBehaviour
 {
@@ -11,6 +10,7 @@ public class ControllerNPC : MonoBehaviour
     [Header("Componentes")]
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private NPCInteractuable npcInteractuable;
 
     [Header("Audios")]
     public AudioSource audioSource;
@@ -18,8 +18,8 @@ public class ControllerNPC : MonoBehaviour
     public AudioClip deathSound;
 
     [Header("Comportamiento")]
-    public bool isAlerted = false; // ← Esto se activa cuando recibe daño
-    public float alertDuration = 5f; // ← Tiempo que persigue tras ser atacado
+    public bool isAlerted = false;
+    public float alertDuration = 5f;
     private float alertTimer = 0f;
 
     void Start()
@@ -27,6 +27,7 @@ public class ControllerNPC : MonoBehaviour
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        npcInteractuable = GetComponent<NPCInteractuable>();
 
         if (audioSource == null)
         {
@@ -55,7 +56,6 @@ public class ControllerNPC : MonoBehaviour
 
         Debug.Log($"NPC recibió daño. Vida restante: {currentHealth}");
 
-        // Sonido de daño
         if (audioSource != null && damageSound != null)
         {
             audioSource.PlayOneShot(damageSound);
@@ -63,8 +63,12 @@ public class ControllerNPC : MonoBehaviour
 
         StartCoroutine(FlashDamageEffect());
 
-        // ⚠️ Activar modo alerta
         ActivarAlerta();
+
+        if (npcInteractuable != null)
+        {
+            npcInteractuable.RecibirDisparo();
+        }
 
         if (currentHealth <= 0)
         {
@@ -77,7 +81,6 @@ public class ControllerNPC : MonoBehaviour
         isAlerted = true;
         alertTimer = alertDuration;
         Debug.Log("NPC entra en modo alerta. ¡Busca al jugador!");
-        // Aquí puedes lanzar animaciones, efectos visuales o notificar a otro script
     }
 
     private void Die()

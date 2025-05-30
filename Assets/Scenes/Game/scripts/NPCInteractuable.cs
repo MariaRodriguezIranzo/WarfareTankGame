@@ -49,7 +49,6 @@ public class NPCInteractuable : MonoBehaviour
         ActualizarJugadorCercano();
 
         float distancia = jugadorCercano != null ? Vector3.Distance(transform.position, jugadorCercano.position) : Mathf.Infinity;
-
         jugadorDetectado = jugadorCercano != null && distancia <= rangoDeteccion;
 
         if (!estadoHostilPermanente && jugadorDetectado && !modoDiabloActivo)
@@ -104,6 +103,15 @@ public class NPCInteractuable : MonoBehaviour
             {
                 audioSource.PlayOneShot(sonidoCompra);
             }
+        }
+    }
+
+    public void RecibirDisparo()
+    {
+        if (!modoDiabloActivo && !estadoHostilPermanente)
+        {
+            Debug.Log("🔫 NPC recibió disparo. Activando modo diablo...");
+            StartCoroutine(ActivarModoDiablo());
         }
     }
 

@@ -1,13 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance; // Singleton
-
     private const int MAX_VIDAS = 5;
 
     public VidaTanque[] tanques;
@@ -15,43 +11,37 @@ public class GameManager : MonoBehaviour
 
     public int vidasJugador = 3;
     public int monedas = 0;
-    public int precioVida = 5; // Precio para comprar vida, editable en inspector
+    public int precioVida = 5;
     public float tiempoRespawn = 3f;
-
-    [Header("UI")]
-    public TextMeshProUGUI textoVidas;
-    public TextMeshProUGUI textoMonedas;
-
-    [Header("UI Revivir")]
-    public GameObject reviviendoUI;
-
-    private bool tanqueRegistrado = false;
 
     public bool mercadoAbierto = false;
 
-    void Awake()
-    {
-        // Singleton pattern
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    private bool tanqueRegistrado = false;
 
     void Start()
     {
         StartCoroutine(EsperarYRegistrarTanque());
-        ActualizarHUDVidas();
-        ActualizarUIMonedas();
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        StartCoroutine(EsperarYRegistrarTanque());
     }
 
     IEnumerator EsperarYRegistrarTanque()
     {
+        tanqueRegistrado = false;
+
         while (!tanqueRegistrado)
         {
             VidaTanque tanqueInstanciado = FindObjectOfType<VidaTanque>();
@@ -60,7 +50,7 @@ public class GameManager : MonoBehaviour
                 tanques = new VidaTanque[] { tanqueInstanciado };
                 tanqueInstanciado.OnTanqueMuerto += () => TanqueMuerto(tanqueInstanciado);
                 tanqueRegistrado = true;
-                Debug.Log("[GameManager] Tanque registrado correctamente.");
+                Debug.Log("[GameManager] Tanque registrado.");
             }
             yield return null;
         }
@@ -72,34 +62,25 @@ public class GameManager : MonoBehaviour
 
         if (vidasJugador <= 0)
         {
-            Debug.Log("Game Over");
+            Debug.Log("[GameManager] Game Over");
             SceneManager.LoadScene("GameOver");
-            ActualizarHUDVidas();
             return;
         }
 
-        ActualizarHUDVidas();
         StartCoroutine(RespawnTanque(tanque));
     }
 
     IEnumerator RespawnTanque(VidaTanque tanque)
     {
-        if (reviviendoUI != null)
-            reviviendoUI.SetActive(true);
-
         yield return new WaitForSeconds(tiempoRespawn);
 
         Vector3 spawn = puntosSpawn[Random.Range(0, puntosSpawn.Length)].position;
         tanque.Respawn(spawn);
-
-        if (reviviendoUI != null)
-            reviviendoUI.SetActive(false);
     }
 
     public void AñadirMonedas(int cantidad)
     {
         monedas += cantidad;
-        ActualizarUIMonedas();
     }
 
     public bool ComprarVida()
@@ -108,22 +89,8 @@ public class GameManager : MonoBehaviour
         {
             monedas -= precioVida;
             vidasJugador = Mathf.Clamp(vidasJugador + 1, 0, MAX_VIDAS);
-            ActualizarUIMonedas();
-            ActualizarHUDVidas();
             return true;
         }
         return false;
-    }
-
-    void ActualizarHUDVidas()
-    {
-        if (textoVidas != null)
-            textoVidas.text = vidasJugador.ToString();
-    }
-
-    void ActualizarUIMonedas()
-    {
-        if (textoMonedas != null)
-            textoMonedas.text = monedas.ToString();
     }
 }

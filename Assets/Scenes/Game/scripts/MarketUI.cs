@@ -9,24 +9,62 @@ public class MarketUI : MonoBehaviour
     public TextMeshProUGUI textoPrecioVida;
     public Button botonComprarVida;
 
+    public GameObject marketCanvas;
+
     private GameManager gameManager;
+    private bool mercadoAbierto = false;
 
     void Start()
     {
-        // Buscar el GameManager en la escena si no hay instancia
         gameManager = FindObjectOfType<GameManager>();
 
         if (botonComprarVida != null)
             botonComprarVida.onClick.AddListener(ComprarVida);
+
+        if (marketCanvas != null)
+            marketCanvas.SetActive(false);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update()
     {
-        // Volver a buscar por si se cambió de escena y se volvió a instanciar
-        if (gameManager == null)
-            gameManager = FindObjectOfType<GameManager>();
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            if (mercadoAbierto)
+                CerrarMercado();
+            else
+                AbrirMercado();
+        }
 
         ActualizarUI();
+    }
+
+    void AbrirMercado()
+    {
+        Debug.Log("Abriendo mercado");
+        marketCanvas.SetActive(true);
+        mercadoAbierto = true;
+
+        GameManager.inputBloqueado = true;
+        Time.timeScale = 0f;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    void CerrarMercado()
+    {
+        Debug.Log("Cerrando mercado");
+        marketCanvas.SetActive(false);
+        mercadoAbierto = false;
+
+        GameManager.inputBloqueado = false;
+        Time.timeScale = 1f;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void ComprarVida()

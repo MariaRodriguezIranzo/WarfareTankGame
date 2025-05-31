@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static bool inputBloqueado = false; // Flag global para bloquear inputs
+
     private const int MAX_VIDAS = 5;
 
     public VidaTanque[] tanques;

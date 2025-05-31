@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.EventSystems;  // Para detectar si el cursor está sobre UI
 
 public class WeaponShooting : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class WeaponShooting : MonoBehaviour
 
     void Update()
     {
+        // Bloquea disparo si el input está bloqueado o si estás sobre UI
+        if (GameManager.inputBloqueado || EventSystem.current.IsPointerOverGameObject())
+            return;
 
         if (Input.GetButtonDown("Fire1") && currentAmmo > 0 && !isReloading)
         {

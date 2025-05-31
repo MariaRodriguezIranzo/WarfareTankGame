@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 public class PauseManager : MonoBehaviour
 {
     public GameObject pauseMenuUI;
@@ -10,6 +9,7 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         pauseMenuUI.SetActive(false);
+        GameManager.inputBloqueado = false;
     }
 
     void Update()
@@ -28,8 +28,10 @@ public class PauseManager : MonoBehaviour
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
-        Cursor.lockState = CursorLockMode.Locked; // Oculta el cursor (si es FPS)
+        Cursor.lockState = CursorLockMode.Locked; // Oculta cursor si FPS
         Cursor.visible = false;
+
+        GameManager.inputBloqueado = false; // Desbloquea input global
     }
 
     public void Pause()
@@ -37,24 +39,25 @@ public class PauseManager : MonoBehaviour
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
-        Cursor.lockState = CursorLockMode.None; // Muestra el cursor para el UI
+        Cursor.lockState = CursorLockMode.None; // Muestra cursor
         Cursor.visible = true;
+
+        GameManager.inputBloqueado = true; // Bloquea input global
     }
 
     public void LoadMenu()
     {
         Time.timeScale = 1f;
+        GameManager.inputBloqueado = false; // Asegura desbloqueo al cargar menú
         SceneManager.LoadScene("menu");
     }
 
     public void QuitGame()
     {
-       
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+        UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+        Application.Quit();
 #endif
-       
     }
 }

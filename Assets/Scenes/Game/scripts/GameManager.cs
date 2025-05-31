@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static bool inputBloqueado = false; // Flag global para bloquear inputs
+    public static bool inputBloqueado = false;
 
     private const int MAX_VIDAS = 5;
 
@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     public bool mercadoAbierto = false;
 
     private bool tanqueRegistrado = false;
+
+    [Header("UI Respawn")]
+    public GameObject canvasRespawn; // <- Referencia al Canvas de respawn
 
     void Start()
     {
@@ -74,10 +77,16 @@ public class GameManager : MonoBehaviour
 
     IEnumerator RespawnTanque(VidaTanque tanque)
     {
+        // Mostrar canvas de respawn
+        if (canvasRespawn != null) canvasRespawn.SetActive(true);
+
         yield return new WaitForSeconds(tiempoRespawn);
 
         Vector3 spawn = puntosSpawn[Random.Range(0, puntosSpawn.Length)].position;
         tanque.Respawn(spawn);
+
+        // Ocultar canvas después de reaparecer
+        if (canvasRespawn != null) canvasRespawn.SetActive(false);
     }
 
     public void AñadirMonedas(int cantidad)

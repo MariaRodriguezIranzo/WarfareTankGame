@@ -23,7 +23,7 @@ public class Bullet : MonoBehaviour
         // Reproducir sonido de disparo
         if (audioSource != null && shootingSound != null)
         {
-            audioSource.PlayOneShot(shootingSound);  // Reproduce el sonido del disparo
+            audioSource.PlayOneShot(shootingSound);
         }
 
         rb.velocity = transform.forward * bulletSpeed;
@@ -32,14 +32,13 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Colisión detectada con: " + other.name);  // Verifica qué objeto está colisionando
+        Debug.Log("Colisión detectada con: " + other.name);
 
         // Verifica si colisiona con el jugador
         ControllerPlayer player = other.GetComponent<ControllerPlayer>();
         if (player != null)
         {
-           
-            Destroy(gameObject); // Destruye la bala al impactar con el jugador
+            Destroy(gameObject);
             return;
         }
 
@@ -48,8 +47,18 @@ public class Bullet : MonoBehaviour
         if (npc != null)
         {
             Debug.Log("Bala impactó al NPC");
-            npc.TakeDamage(damage);  // Aplica el daño
-            Destroy(gameObject);  // Destruye la bala al impactar con el NPC
+            npc.TakeDamage(damage);
+            Destroy(gameObject);
+            return;
+        }
+
+        // Verifica si colisiona con el Boss
+        ControllerBoss boss = other.GetComponent<ControllerBoss>();
+        if (boss != null)
+        {
+            Debug.Log("Bala impactó al Boss");
+            boss.TakeDamage(damage);
+            Destroy(gameObject);
         }
     }
 }

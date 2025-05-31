@@ -22,6 +22,9 @@ public class ControllerNPC : MonoBehaviour
     public float alertDuration = 5f;
     private float alertTimer = 0f;
 
+    [Header("Efectos Visuales")]
+    public GameObject particulasMuertePrefab;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -90,6 +93,12 @@ public class ControllerNPC : MonoBehaviour
         if (audioSource != null && deathSound != null)
         {
             audioSource.PlayOneShot(deathSound);
+        }
+
+        // Instanciar partículas de muerte si hay prefab asignado
+        if (particulasMuertePrefab != null)
+        {
+            Instantiate(particulasMuertePrefab, transform.position, Quaternion.identity);
         }
 
         StartCoroutine(PlayDeathAnimation());

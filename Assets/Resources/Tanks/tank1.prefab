@@ -470,6 +470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vidaMaxima: 300
   barraDeVida: {fileID: 8867590734853302387}
+  particulasMuertePrefab: {fileID: 8367907410985086596, guid: 0b493b97a8e419d46903c1b023460740, type: 3}
 --- !u!82 &8672090874322756449
 AudioSource:
   m_ObjectHideFlags: 0
@@ -482,7 +483,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 96726162420090a49b9ac50751eff2b2, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.535
   m_Pitch: 1
   Loop: 0
   Mute: 0

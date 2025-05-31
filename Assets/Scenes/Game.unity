@@ -14241,6 +14241,7 @@ MonoBehaviour:
   deathSound: {fileID: 8300000, guid: 6a56a2d785235f44cbaaa23a3dad4523, type: 3}
   isAlerted: 0
   alertDuration: 5
+  particulasMuertePrefab: {fileID: 7403103098228120956, guid: 513099c3c135b01439895582ca4ec420, type: 3}
 --- !u!195 &436283749
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -14290,6 +14291,8 @@ MonoBehaviour:
   cadenciaDisparo: 1.5
   audioSource: {fileID: 436283755}
   sonidoCompra: {fileID: 8300000, guid: 991e2f8258e7cef46b9ece01c58802e0, type: 3}
+  particulasModoDiabloPrefab: {fileID: 3740193805690738414, guid: 626274bfa0ecf6841977f1bce8c6bf16, type: 3}
+  particulasEstadoHostilPrefab: {fileID: 7207109987891872099, guid: d1dcc4bfbc6000944b2cfb0dd422a8e0, type: 3}
 --- !u!82 &436283755
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14302,7 +14305,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 96726162420090a49b9ac50751eff2b2, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.279
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -18332,7 +18335,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &838239702
 Transform:
   m_ObjectHideFlags: 0
@@ -18638,6 +18641,7 @@ MonoBehaviour:
   deathSound: {fileID: 8300000, guid: 6a56a2d785235f44cbaaa23a3dad4523, type: 3}
   isAlerted: 0
   alertDuration: 5
+  particulasMuertePrefab: {fileID: 7403103098228120956, guid: 513099c3c135b01439895582ca4ec420, type: 3}
 --- !u!114 &878691780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24507,7 +24511,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ad4754e5a5a595c4dab6a9b922324930, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.07
+  m_Volume: 0.006
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -29006,6 +29010,7 @@ MonoBehaviour:
   textoVidasMarket: {fileID: 1491997024}
   textoPrecioVida: {fileID: 415482008}
   botonComprarVida: {fileID: 1592778029}
+  marketCanvas: {fileID: 838239701}
 --- !u!114 &1991643652
 MonoBehaviour:
   m_ObjectHideFlags: 0

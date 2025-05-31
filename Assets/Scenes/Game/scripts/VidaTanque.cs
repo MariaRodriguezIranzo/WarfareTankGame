@@ -9,6 +9,9 @@ public class VidaTanque : MonoBehaviour
     [Header("Barra de Vida")]
     public Slider barraDeVida;
 
+    [Header("Efectos Visuales")]
+    public GameObject particulasMuertePrefab;
+
     public System.Action OnTanqueMuerto;
 
     void Start()
@@ -49,6 +52,13 @@ public class VidaTanque : MonoBehaviour
     void Morir()
     {
         Debug.Log("☠️ Tanque ha muerto");
+
+        // Instanciar partículas de muerte si hay un prefab asignado
+        if (particulasMuertePrefab != null)
+        {
+            Instantiate(particulasMuertePrefab, transform.position, Quaternion.identity);
+        }
+
         OnTanqueMuerto?.Invoke();
         gameObject.SetActive(false);
     }

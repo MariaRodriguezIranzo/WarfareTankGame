@@ -6,10 +6,16 @@ using UnityEngine.UI;
 
 public class CreditMenu : MonoBehaviour
 {
-    // Función para ir a los créditos
+    void Start()
+    {
+        // Activar y desbloquear el cursor
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    // Función para ir al menú principal
     public void OnBackButtonClick()
     {
-        // Cambiar a la escena de créditos
         SceneManager.LoadScene("menu");
     }
 
@@ -19,7 +25,7 @@ public class CreditMenu : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+        Application.Quit();
 #endif
     }
 }

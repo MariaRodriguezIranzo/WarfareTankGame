@@ -28,6 +28,13 @@ public class NPCInteractuable : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip sonidoCompra;
 
+    [Header("Efectos Visuales")]
+    public GameObject particulasModoDiabloPrefab;
+    public GameObject particulasEstadoHostilPrefab;
+
+    private GameObject particulasModoDiabloInstanciadas;
+    private GameObject particulasEstadoHostilInstanciadas;
+
     private Transform jugadorCercano;
     private NavMeshAgent agent;
 
@@ -121,12 +128,37 @@ public class NPCInteractuable : MonoBehaviour
 
         modoDiabloActivo = true;
         textoInteraccionUI.SetActive(false);
+
+        // Instanciar partículas de modo diablo si hay prefab asignado
+        if (particulasModoDiabloPrefab != null && particulasModoDiabloInstanciadas == null)
+        {
+            particulasModoDiabloInstanciadas = Instantiate(particulasModoDiabloPrefab, transform);
+            particulasModoDiabloInstanciadas.SetActive(true);
+        }
+
         Debug.Log("🔴 ¡Modo Diablo ACTIVADO por 5 segundos!");
 
         yield return new WaitForSeconds(5f);
 
         modoDiabloActivo = false;
+
+        // Destruir partículas modo diablo
+        if (particulasModoDiabloInstanciadas != null)
+        {
+            Destroy(particulasModoDiabloInstanciadas);
+            particulasModoDiabloInstanciadas = null;
+        }
+
+        // Activar estado hostil permanente
         estadoHostilPermanente = true;
+
+        // Instanciar partículas de estado hostil si hay prefab asignado
+        if (particulasEstadoHostilPrefab != null && particulasEstadoHostilInstanciadas == null)
+        {
+            particulasEstadoHostilInstanciadas = Instantiate(particulasEstadoHostilPrefab, transform);
+            particulasEstadoHostilInstanciadas.SetActive(true);
+        }
+
         Debug.Log("🟡 NPC entra en estado Hostil Permanente. Patrulla sin pausas y ataca al jugador si lo ve.");
     }
 
@@ -190,5 +222,13 @@ public class NPCInteractuable : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, rangoDeteccion);
+    }
+
+    void OnDestroy()
+    {
+        if (particulasModoDiabloInstanciadas != null)
+            Destroy(particulasModoDiabloInstanciadas);
+        if (particulasEstadoHostilInstanciadas != null)
+            Destroy(particulasEstadoHostilInstanciadas);
     }
 }

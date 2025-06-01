@@ -36,6 +36,9 @@ public class ControllerNPC : MonoBehaviour
     [Header("Efectos Visuales")]
     public GameObject particulasMuertePrefab;
 
+    [Header("Drop de Moneda")]
+    public GameObject monedaPrefab;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -91,7 +94,6 @@ public class ControllerNPC : MonoBehaviour
         if (jugador == null || agent == null) return;
         agent.SetDestination(jugador.position);
 
-        // Rotación suave
         Vector3 direction = (jugador.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
@@ -157,6 +159,12 @@ public class ControllerNPC : MonoBehaviour
         if (particulasMuertePrefab != null)
         {
             Instantiate(particulasMuertePrefab, transform.position, Quaternion.identity);
+        }
+
+        // 💰 Drop de moneda
+        if (monedaPrefab != null)
+        {
+            Instantiate(monedaPrefab, transform.position + Vector3.up * 1f, Quaternion.identity);
         }
 
         StartCoroutine(PlayDeathAnimation());

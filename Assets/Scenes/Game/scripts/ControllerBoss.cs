@@ -11,17 +11,18 @@ public class ControllerBoss : MonoBehaviour
 
     [Header("Fase del Boss")]
     public bool enSegundaFase = false;
-    private int ultimaVidaCheck = 10;
 
-    [Header("Ataque Especial")]
-    public GameObject ataqueEspecialPrefab;
+    [Header("Disparo")]
+    public GameObject proyectilPrefab;
     public Transform puntoDisparo;
-    public float cooldownEspecial = 5f;
-    private float tiempoUltimoEspecial = 0f;
+    public float cooldownDisparo = 2f;
+    public float distanciaDisparo = 10f;
+    private float tiempoUltimoDisparo = 0f;
 
     [Header("Persecución")]
     public float rangoDeteccion = 30f;
     public float velocidadMovimiento = 4f;
+    public float distanciaMinimaAlJugador = 3f;
 
     [Header("Componentes")]
     private SpriteRenderer spriteRenderer;
@@ -36,52 +37,61 @@ public class ControllerBoss : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        ultimaVidaCheck = maxHealth;
-
         spriteRenderer = GetComponent<SpriteRenderer>();
         agente = GetComponent<NavMeshAgent>();
-        if (agente != null)
-        {
-            agente.speed = velocidadMovimiento;
-        }
+        if (agente != null) agente.speed = velocidadMovimiento;
     }
 
     void Update()
     {
-        Transform jugadorCercano = ObtenerJugadorMasCercano();
+        Transform jugador = ObtenerJugadorMasCercano();
 
-        if (jugadorCercano != null)
-            PerseguirJugador(jugadorCercano);
-
-        if (Time.time - tiempoUltimoEspecial >= cooldownEspecial && (ultimaVidaCheck - currentHealth) >= 2)
+        if (jugador != null)
         {
-            LanzarAtaqueEspecial();
-            tiempoUltimoEspecial = Time.time;
-            ultimaVidaCheck = currentHealth;
+            PerseguirYAtacar(jugador);
         }
     }
 
     Transform ObtenerJugadorMasCercano()
     {
-        GameObject[] jugadoresGO = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] jugadores = GameObject.FindGameObjectsWithTag("Player");
 
-        if (jugadoresGO.Length == 0)
+        if (jugadores.Length == 0)
             return null;
 
-        return jugadoresGO
-            .Select(go => go.transform)
+        return jugadores
+            .Select(j => j.transform)
             .OrderBy(t => Vector3.Distance(transform.position, t.position))
             .FirstOrDefault();
     }
 
-    void PerseguirJugador(Transform jugador)
+    void PerseguirYAtacar(Transform jugador)
     {
         if (jugador == null || agente == null) return;
 
         float distancia = Vector3.Distance(transform.position, jugador.position);
+
         if (distancia <= rangoDeteccion)
         {
-            agente.SetDestination(jugador.position);
+            if (distancia > distanciaMinimaAlJugador)
+            {
+                agente.isStopped = false;
+                agente.SetDestination(jugador.position);
+            }
+            else
+            {
+                agente.isStopped = true;
+            }
+
+            if (Time.time - tiempoUltimoDisparo >= cooldownDisparo && distancia <= distanciaDisparo)
+            {
+                Disparar(jugador);
+                tiempoUltimoDisparo = Time.time;
+            }
+        }
+        else
+        {
+            agente.isStopped = true;
         }
     }
 
@@ -94,7 +104,15 @@ public class ControllerBoss : MonoBehaviour
         if (audioSource && damageSound) audioSource.PlayOneShot(damageSound);
         StartCoroutine(FlashDamage());
 
-        if (!enSegundaFase && currentHealth <= 5)
+        // Dispara inmediatamente al recibir daño
+        Transform jugador = ObtenerJugadorMasCercano();
+        if (jugador != null)
+        {
+            Disparar(jugador);
+            tiempoUltimoDisparo = Time.time; // resetea cooldown
+        }
+
+        if (!enSegundaFase && currentHealth <= maxHealth / 2)
         {
             ActivarSegundaFase();
         }
@@ -113,12 +131,21 @@ public class ControllerBoss : MonoBehaviour
         if (agente != null) agente.speed = velocidadMovimiento;
     }
 
-    void LanzarAtaqueEspecial()
+    void Disparar(Transform objetivo)
     {
-        if (ataqueEspecialPrefab != null && puntoDisparo != null)
+        if (proyectilPrefab != null && puntoDisparo != null)
         {
-            Debug.Log("⚡ Boss lanza ATAQUE ESPECIAL");
-            Instantiate(ataqueEspecialPrefab, puntoDisparo.position, puntoDisparo.rotation);
+            Vector3 direccion = (objetivo.position - puntoDisparo.position).normalized;
+            Quaternion rotacion = Quaternion.LookRotation(direccion);
+            GameObject proyectil = Instantiate(proyectilPrefab, puntoDisparo.position, rotacion);
+
+            Rigidbody rb = proyectil.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.velocity = direccion * 10f;
+            }
+
+            Debug.Log("🔫 Boss dispara");
         }
     }
 

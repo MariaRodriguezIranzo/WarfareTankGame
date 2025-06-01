@@ -14242,10 +14242,11 @@ MonoBehaviour:
   isAlerted: 0
   alertDuration: 5
   rangoDeteccion: 15
-  balaPrefab: {fileID: 0}
-  puntoDisparo: {fileID: 0}
+  balaPrefab: {fileID: 5919220286410709334, guid: 88a4817108823dc4ea568a53a082e993, type: 3}
+  puntoDisparo: {fileID: 1231277409}
   cadenciaDisparo: 1.5
   particulasMuertePrefab: {fileID: 7403103098228120956, guid: 513099c3c135b01439895582ca4ec420, type: 3}
+  monedaPrefab: {fileID: 4761019609864006692, guid: 7e914db0cdb5cf14eaaef17cced125a2, type: 3}
 --- !u!195 &436283749
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -18710,10 +18711,11 @@ MonoBehaviour:
   isAlerted: 0
   alertDuration: 5
   rangoDeteccion: 15
-  balaPrefab: {fileID: 0}
-  puntoDisparo: {fileID: 0}
+  balaPrefab: {fileID: 5919220286410709334, guid: 88a4817108823dc4ea568a53a082e993, type: 3}
+  puntoDisparo: {fileID: 649174066}
   cadenciaDisparo: 1.5
   particulasMuertePrefab: {fileID: 7403103098228120956, guid: 513099c3c135b01439895582ca4ec420, type: 3}
+  monedaPrefab: {fileID: 4761019609864006692, guid: 7e914db0cdb5cf14eaaef17cced125a2, type: 3}
 --- !u!114 &878691780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28720,6 +28722,14 @@ PrefabInstance:
     - target: {fileID: 7581905368334320644, guid: 5a4135c03d3d26a44a8be327577cb2ea, type: 3}
       propertyPath: rangoDeteccion
       value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 7581905368334320644, guid: 5a4135c03d3d26a44a8be327577cb2ea, type: 3}
+      propertyPath: proyectilPrefab
+      value: 
+      objectReference: {fileID: 5919220286410709334, guid: 88a4817108823dc4ea568a53a082e993, type: 3}
+    - target: {fileID: 7581905368334320644, guid: 5a4135c03d3d26a44a8be327577cb2ea, type: 3}
+      propertyPath: distanciaMinimaAlJugador
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8716346146874879422, guid: 5a4135c03d3d26a44a8be327577cb2ea, type: 3}
       propertyPath: m_Name

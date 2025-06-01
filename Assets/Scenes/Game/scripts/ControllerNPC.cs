@@ -30,14 +30,15 @@ public class ControllerNPC : MonoBehaviour
     private Transform jugadorCercano;
     public GameObject balaPrefab;
     public Transform puntoDisparo;
-    public float cadenciaDisparo = 1.5f;
-    private bool puedeDisparar = true;
+    public float tiempoEntreDisparos = 30f;
+    private float proximoDisparo = 0f;
 
     [Header("Efectos Visuales")]
     public GameObject particulasMuertePrefab;
 
     [Header("Drop de Moneda")]
-    public GameObject monedaPrefab;
+    public GameObject monedaPrefab;  // Aquí asigna el prefab de la moneda en el inspector
+    public int cantidadMonedas = 1;  // Cuántas monedas suelta al morir
 
     void Start()
     {
@@ -66,7 +67,12 @@ public class ControllerNPC : MonoBehaviour
                 if (distancia <= rangoDeteccion)
                 {
                     PerseguirJugador(jugadorCercano);
-                    Disparar(jugadorCercano);
+
+                    if (Time.time >= proximoDisparo)
+                    {
+                        Disparar(jugadorCercano);
+                        proximoDisparo = Time.time + tiempoEntreDisparos;
+                    }
                 }
             }
 
@@ -101,17 +107,11 @@ public class ControllerNPC : MonoBehaviour
 
     void Disparar(Transform jugador)
     {
-        if (puedeDisparar && balaPrefab != null && puntoDisparo != null)
+        if (balaPrefab != null && puntoDisparo != null)
         {
             Instantiate(balaPrefab, puntoDisparo.position, puntoDisparo.rotation);
-            puedeDisparar = false;
-            Invoke(nameof(ResetDisparo), cadenciaDisparo);
+            Debug.Log("NPC disparó al jugador detectado.");
         }
-    }
-
-    void ResetDisparo()
-    {
-        puedeDisparar = true;
     }
 
     public void TakeDamage(int damage)
@@ -161,10 +161,15 @@ public class ControllerNPC : MonoBehaviour
             Instantiate(particulasMuertePrefab, transform.position, Quaternion.identity);
         }
 
-        // 💰 Drop de moneda
+        // Aquí soltamos las monedas al morir
         if (monedaPrefab != null)
         {
-            Instantiate(monedaPrefab, transform.position + Vector3.up * 1f, Quaternion.identity);
+            for (int i = 0; i < cantidadMonedas; i++)
+            {
+                // Puedes agregar un pequeño offset random para que no se apilen justo en el mismo lugar
+                Vector3 offset = new Vector3(Random.Range(-0.5f, 0.5f), 0.5f, Random.Range(-0.5f, 0.5f));
+                Instantiate(monedaPrefab, transform.position + offset, Quaternion.identity);
+            }
         }
 
         StartCoroutine(PlayDeathAnimation());

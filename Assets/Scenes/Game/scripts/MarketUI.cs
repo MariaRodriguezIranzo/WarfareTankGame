@@ -81,7 +81,7 @@ public class MarketUI : MonoBehaviour
             textoMonedasMarket.text = gameManager.monedas.ToString();
 
         if (textoVidasMarket != null)
-            textoVidasMarket.text = gameManager.vidasJugador.ToString();
+            textoVidasMarket.text = $" {gameManager.vidasJugador} / 5";
 
         if (textoPrecioVida != null)
             textoPrecioVida.text = $"PRICE LIVES: {gameManager.precioVida} COINS";

@@ -182,9 +182,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfef568ddb0bd74388b63653bca1833, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 10
+  bulletSpeed: 15
   lifetime: 2
-  damage: 400
+  damage: 60
   audioSource: {fileID: 4498822160875104283}
   shootingSound: {fileID: 8300000, guid: da51f28eb2baffd459a4fe4595222eee, type: 3}
 --- !u!82 &4498822160875104283

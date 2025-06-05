@@ -1,15 +1,25 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Random = UnityEngine.Random;
+using TMPro;
 
 public class TankSelection : MonoBehaviour
 {
+    [Header("Tanques")]
     [SerializeField] private GameObject[] tanks;
     [SerializeField] private GameObject TankSelected;
     [SerializeField] private GameObject Platform;
 
-    // Añade aquí los tipos de scripts que quieres desactivar
+    [Header("UI de Stats")]
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI speedText;
+    [SerializeField] private TextMeshProUGUI armorText;
+    [SerializeField] private TextMeshProUGUI damageText;
+    [SerializeField] private TextMeshProUGUI descriptionText;
+
+    [Header("Estadísticas de Tanques")]
+    [SerializeField] private TankStats[] tankStats;
+
     private Type[] scriptsToDisable = new Type[]
     {
         typeof(WeaponShooting)
@@ -33,25 +43,17 @@ public class TankSelection : MonoBehaviour
 
     private void Start()
     {
-        _currentTankIndex = PlayerPrefs.GetInt("SelectedTank");
+        _currentTankIndex = PlayerPrefs.GetInt("SelectedTank", 0);
 
         if (_currentTankIndex >= 0 && _currentTankIndex < tanks.Length)
         {
             tanks[_currentTankIndex].SetActive(true);
 
-            // Instanciar tanque
             TankSelected = Instantiate(tanks[_currentTankIndex], TankSelected.transform.position, TankSelected.transform.rotation);
             TankSelected.transform.SetParent(Platform.transform);
 
-            // 🚫 Desactivar scripts solo en la instancia del tanque
-            foreach (var type in scriptsToDisable)
-            {
-                Component script = TankSelected.GetComponentInChildren(type);
-                if (script != null)
-                {
-                    ((MonoBehaviour)script).enabled = false;
-                }
-            }
+            DisableTankScripts(TankSelected);
+            UpdateTankStatsUI();
         }
         else
         {
@@ -90,27 +92,57 @@ public class TankSelection : MonoBehaviour
         TankSelected = Instantiate(tanks[_currentTankIndex], TankSelected.transform.position, TankSelected.transform.rotation);
         TankSelected.transform.SetParent(Platform.transform);
 
-        // 🚫 Desactivar scripts de nuevo en cada cambio de tanque
-        foreach (var type in scriptsToDisable)
-        {
-            Component script = TankSelected.GetComponentInChildren(type);
-            if (script != null)
-            {
-                ((MonoBehaviour)script).enabled = false;
-            }
-        }
+        DisableTankScripts(TankSelected);
+        UpdateTankStatsUI();
 
         PlayerPrefs.SetInt("SelectedTank", _currentTankIndex);
         PlayerPrefs.Save();
     }
 
+    private void DisableTankScripts(GameObject tank)
+    {
+        foreach (var type in scriptsToDisable)
+        {
+            Component script = tank.GetComponentInChildren(type);
+            if (script != null)
+                ((MonoBehaviour)script).enabled = false;
+        }
+    }
+
+    private void UpdateTankStatsUI()
+    {
+        if (_currentTankIndex < tankStats.Length)
+        {
+            TankStats stats = tankStats[_currentTankIndex];
+            nameText.text = stats.tankName;
+            speedText.text = $"Speed: {stats.speed}";
+            armorText.text = $"HP: {stats.armor}";
+            damageText.text = $"Damage: {stats.damage}";
+            descriptionText.text = stats.description;
+        }
+        else
+        {
+            Debug.LogWarning("No stats assigned for this tank index.");
+        }
+    }
+
     public void PlayGame()
     {
-        SceneManager.LoadScene("Game"); // Cambia el nombre según tu escena real
+        SceneManager.LoadScene("Game");
     }
 
     public void BackToMainMenu()
     {
-        SceneManager.LoadScene("menu"); // Cambia el nombre según tu escena real
+        SceneManager.LoadScene("menu");
     }
+}
+
+[System.Serializable]
+public class TankStats
+{
+    public string tankName;
+    public float speed;
+    public float armor;
+    public float damage;
+    public string description;
 }

@@ -5,9 +5,8 @@ using UnityEngine.AI;
 
 public class ControllerNPC : MonoBehaviour
 {
-    [Header("Vida")]
-    public int maxHealth = 3;
-    private int currentHealth;
+    [Header("HP")]
+    public float HP = 100f; // Lo puedes editar desde el Inspector
 
     [Header("Componentes")]
     private Animator animator;
@@ -37,12 +36,11 @@ public class ControllerNPC : MonoBehaviour
     public GameObject particulasMuertePrefab;
 
     [Header("Drop de Moneda")]
-    public GameObject monedaPrefab;  // Aquí asigna el prefab de la moneda en el inspector
-    public int cantidadMonedas = 1;  // Cuántas monedas suelta al morir
+    public GameObject monedaPrefab;
+    public int cantidadMonedas = 1;
 
     void Start()
     {
-        currentHealth = maxHealth;
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         npcInteractuable = GetComponent<NPCInteractuable>();
@@ -114,12 +112,12 @@ public class ControllerNPC : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        HP -= damage;
+        HP = Mathf.Clamp(HP, 0, 9999); // Puedes ponerle un límite alto si quieres
 
-        Debug.Log($"NPC recibió daño. Vida restante: {currentHealth}");
+        Debug.Log($"NPC recibió {damage} de daño. HP restante: {HP}");
 
         if (audioSource != null && damageSound != null)
         {
@@ -134,7 +132,7 @@ public class ControllerNPC : MonoBehaviour
             npcInteractuable.RecibirDisparo();
         }
 
-        if (currentHealth <= 0)
+        if (HP <= 0)
         {
             Die();
         }
@@ -161,12 +159,10 @@ public class ControllerNPC : MonoBehaviour
             Instantiate(particulasMuertePrefab, transform.position, Quaternion.identity);
         }
 
-        // Aquí soltamos las monedas al morir
         if (monedaPrefab != null)
         {
             for (int i = 0; i < cantidadMonedas; i++)
             {
-                // Puedes agregar un pequeño offset random para que no se apilen justo en el mismo lugar
                 Vector3 offset = new Vector3(Random.Range(-0.5f, 0.5f), 0.5f, Random.Range(-0.5f, 0.5f));
                 Instantiate(monedaPrefab, transform.position + offset, Quaternion.identity);
             }

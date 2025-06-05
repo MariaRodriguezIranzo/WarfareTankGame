@@ -6,11 +6,12 @@ using UnityEngine.AI;
 public class ControllerBoss : MonoBehaviour
 {
     [Header("Vida")]
-    public int maxHealth = 10;
-    private int currentHealth;
+    public float HP = 760f;
 
     [Header("Fase del Boss")]
-    public bool enSegundaFase = false;
+    private bool fase2Activa = false;
+    private bool fase3Activa = false;
+    private float dañoAcumulado = 0f;
 
     [Header("Disparo")]
     public GameObject proyectilPrefab;
@@ -34,9 +35,12 @@ public class ControllerBoss : MonoBehaviour
     public AudioClip deathSound;
     public GameObject particulasMuertePrefab;
 
+    [Header("Partículas de Fases")]
+    public GameObject fase2ParticulasPrefab;
+    public GameObject fase3ParticulasPrefab;
+
     void Start()
     {
-        currentHealth = maxHealth;
         spriteRenderer = GetComponent<SpriteRenderer>();
         agente = GetComponent<NavMeshAgent>();
         if (agente != null) agente.speed = velocidadMovimiento;
@@ -95,58 +99,79 @@ public class ControllerBoss : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        Debug.Log($"💢 Boss recibió daño. Vida actual: {currentHealth}");
+        HP -= damage;
+        dañoAcumulado += damage;
+
+        Debug.Log($"💢 Boss recibió daño: {damage}. HP restante: {HP}");
 
         if (audioSource && damageSound) audioSource.PlayOneShot(damageSound);
         StartCoroutine(FlashDamage());
 
-        // Dispara inmediatamente al recibir daño
-        Transform jugador = ObtenerJugadorMasCercano();
-        if (jugador != null)
+        // Fase intermedia: si acumuló 120 o más, dispara doble y reinicia contador
+        if (!fase2Activa && dañoAcumulado >= 120f)
         {
-            Disparar(jugador);
-            tiempoUltimoDisparo = Time.time; // resetea cooldown
+            dañoAcumulado = 0f;
+            Transform jugador = ObtenerJugadorMasCercano();
+            if (jugador != null)
+            {
+                Disparar(jugador, 2);
+                tiempoUltimoDisparo = Time.time;
+            }
         }
 
-        if (!enSegundaFase && currentHealth <= maxHealth / 2)
+        // Activar Fase 2 permanente
+        if (!fase2Activa && HP <= 550f)
         {
-            ActivarSegundaFase();
+            fase2Activa = true;
+            Debug.Log("🔥 Boss entra en FASE 2: disparo doble permanente");
+
+            if (fase2ParticulasPrefab != null)
+                Instantiate(fase2ParticulasPrefab, transform.position, Quaternion.identity, transform);
         }
 
-        if (currentHealth <= 0)
+        // Activar Fase 3 (Final)
+        if (!fase3Activa && HP <= 300f)
+        {
+            fase3Activa = true;
+            Debug.Log("💀 Boss entra en FASE FINAL: ráfagas triples");
+
+            if (fase3ParticulasPrefab != null)
+                Instantiate(fase3ParticulasPrefab, transform.position, Quaternion.identity, transform);
+        }
+
+        if (HP <= 0)
         {
             Morir();
         }
     }
 
-    void ActivarSegundaFase()
+    void Disparar(Transform objetivo, int cantidad = 1)
     {
-        enSegundaFase = true;
-        Debug.Log("🔥 Boss entra en Segunda Fase. ¡Se vuelve más agresivo!");
-        velocidadMovimiento *= 1.5f;
-        if (agente != null) agente.speed = velocidadMovimiento;
-    }
+        if (proyectilPrefab == null || puntoDisparo == null || objetivo == null) return;
 
-    void Disparar(Transform objetivo)
-    {
-        if (proyectilPrefab != null && puntoDisparo != null)
+        Vector3 direccion = (objetivo.position - puntoDisparo.position).normalized;
+
+        for (int i = 0; i < cantidad; i++)
         {
-            Vector3 direccion = (objetivo.position - puntoDisparo.position).normalized;
             Quaternion rotacion = Quaternion.LookRotation(direccion);
-            GameObject proyectil = Instantiate(proyectilPrefab, puntoDisparo.position, rotacion);
 
+            if (cantidad == 3) // Fase 3: Disparo ráfaga con ligero spread
+            {
+                float spread = Random.Range(-5f, 5f);
+                rotacion = Quaternion.Euler(rotacion.eulerAngles + new Vector3(0, spread, 0));
+            }
+
+            GameObject proyectil = Instantiate(proyectilPrefab, puntoDisparo.position, rotacion);
             Rigidbody rb = proyectil.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.velocity = direccion * 10f;
+                rb.velocity = proyectil.transform.forward * 10f;
             }
-
-            Debug.Log("🔫 Boss dispara");
         }
+
+        Debug.Log($"🔫 Boss disparó {cantidad} proyectil(es)");
     }
 
     void Morir()

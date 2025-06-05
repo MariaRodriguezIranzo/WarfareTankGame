@@ -50,7 +50,7 @@ public class ControllerBoss : MonoBehaviour
     {
         Transform jugador = ObtenerJugadorMasCercano();
 
-        if (jugador != null)
+        if (jugador != null && jugador.gameObject.activeInHierarchy)
         {
             PerseguirYAtacar(jugador);
         }
@@ -64,6 +64,7 @@ public class ControllerBoss : MonoBehaviour
             return null;
 
         return jugadores
+            .Where(j => j.activeInHierarchy)
             .Select(j => j.transform)
             .OrderBy(t => Vector3.Distance(transform.position, t.position))
             .FirstOrDefault();
@@ -80,7 +81,11 @@ public class ControllerBoss : MonoBehaviour
             if (distancia > distanciaMinimaAlJugador)
             {
                 agente.isStopped = false;
-                agente.SetDestination(jugador.position);
+
+                if (NavMesh.SamplePosition(jugador.position, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
+                {
+                    agente.SetDestination(hit.position);
+                }
             }
             else
             {
@@ -92,6 +97,8 @@ public class ControllerBoss : MonoBehaviour
                 Disparar(jugador);
                 tiempoUltimoDisparo = Time.time;
             }
+
+            Debug.DrawLine(transform.position, jugador.position, Color.red); // Visual debug
         }
         else
         {
@@ -109,19 +116,19 @@ public class ControllerBoss : MonoBehaviour
         if (audioSource && damageSound) audioSource.PlayOneShot(damageSound);
         StartCoroutine(FlashDamage());
 
-        // Fase intermedia: si acumuló 120 o más, dispara doble y reinicia contador
+        // Fase de disparo especial por daño acumulado
         if (!fase2Activa && dañoAcumulado >= 120f)
         {
             dañoAcumulado = 0f;
             Transform jugador = ObtenerJugadorMasCercano();
-            if (jugador != null)
+            if (jugador != null && jugador.gameObject.activeInHierarchy)
             {
                 Disparar(jugador, 2);
                 tiempoUltimoDisparo = Time.time;
             }
         }
 
-        // Activar Fase 2 permanente
+        // Activar Fase 2
         if (!fase2Activa && HP <= 550f)
         {
             fase2Activa = true;
@@ -131,7 +138,7 @@ public class ControllerBoss : MonoBehaviour
                 Instantiate(fase2ParticulasPrefab, transform.position, Quaternion.identity, transform);
         }
 
-        // Activar Fase 3 (Final)
+        // Activar Fase 3
         if (!fase3Activa && HP <= 300f)
         {
             fase3Activa = true;
@@ -157,7 +164,7 @@ public class ControllerBoss : MonoBehaviour
         {
             Quaternion rotacion = Quaternion.LookRotation(direccion);
 
-            if (cantidad == 3) // Fase 3: Disparo ráfaga con ligero spread
+            if (cantidad == 3)
             {
                 float spread = Random.Range(-5f, 5f);
                 rotacion = Quaternion.Euler(rotacion.eulerAngles + new Vector3(0, spread, 0));

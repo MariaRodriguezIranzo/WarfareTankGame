@@ -35,6 +35,11 @@ Warfare Tank es un juego de combate de tanques en un mundo dominado por máquina
 | Pausar juego | Esc             |
 
 # 🕹️ JUEGO
+
+Solo los más fuertes sobrevivirán.
+
+¿Estás listo para derrotar a todos los enemigos y dominar el campo de batalla?
+
 ![image](https://github.com/user-attachments/assets/9ece655e-3163-4080-baaa-9bec7505abc7)
 
 ![image](https://github.com/user-attachments/assets/5879bb42-5d23-4136-95e6-a41f84a472eb)

@@ -25,11 +25,13 @@ Warfare Tank es un juego de combate de tanques en un mundo dominado por máquina
 
 | Acción       | Teclas          |
 | ------------ | --------------- |
-| Mover tanque | WASD 
+| Mover tanque | WASD            |
 | Disparar     | Click izq       |
 | inter. NPC   | E               |
 | inter. cofre | M               |
 | Pausar juego | Esc             |
+
+# 🕹️ JUEGO
 
 ![image](https://github.com/user-attachments/assets/3d708c7b-8a10-4638-9916-0fbc08ece4d5)
 ![image](https://github.com/user-attachments/assets/10aebf72-cfa3-42eb-8633-a21215ed85e4)

@@ -5,6 +5,7 @@ Frente a ellos, un ejército de máquinas asesinas, frías y sin alma.
 Al final del camino, la máquina suprema, un coloso de metal con la capacidad de borrar la resistencia en un solo ataque.
 
 🛡️ ¿Serás la fuerza imparable que aplasta todo a su paso?
+
 ⚡ ¿O la sombra veloz que ataca antes de ser vista?
 
 Elige tu tanque. Enfréntate al destino. Gana la guerra.

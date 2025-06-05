@@ -24995,12 +24995,12 @@ GameObject:
   m_Component:
   - component: {fileID: 462730839}
   m_Layer: 0
-  m_Name: boos
+  m_Name: boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &462730839
 Transform:
   m_ObjectHideFlags: 0
@@ -78960,7 +78960,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5825202676729910782, guid: 5a4135c03d3d26a44a8be327577cb2ea, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -61.7
+      value: -74.64
       objectReference: {fileID: 0}
     - target: {fileID: 5825202676729910782, guid: 5a4135c03d3d26a44a8be327577cb2ea, type: 3}
       propertyPath: m_LocalPosition.y
@@ -78968,7 +78968,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5825202676729910782, guid: 5a4135c03d3d26a44a8be327577cb2ea, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -116.3
+      value: -92.87
       objectReference: {fileID: 0}
     - target: {fileID: 5825202676729910782, guid: 5a4135c03d3d26a44a8be327577cb2ea, type: 3}
       propertyPath: m_LocalRotation.w
@@ -79028,11 +79028,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8716346146874879422, guid: 5a4135c03d3d26a44a8be327577cb2ea, type: 3}
       propertyPath: m_Name
-      value: boos
+      value: boss
       objectReference: {fileID: 0}
     - target: {fileID: 8716346146874879422, guid: 5a4135c03d3d26a44a8be327577cb2ea, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

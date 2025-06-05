@@ -42,7 +42,10 @@ Solo los más fuertes sobrevivirán.
 
 ![image](https://github.com/user-attachments/assets/9ece655e-3163-4080-baaa-9bec7505abc7)
 
-![image](https://github.com/user-attachments/assets/5879bb42-5d23-4136-95e6-a41f84a472eb)
+![image](https://github.com/user-attachments/assets/5879bb42-5d23-4136-95e6-a41f84a472eb
+
+![image](https://github.com/user-attachments/assets/b2665b99-88a5-4596-a4ed-c64b6a19c8b7)
+
 
 
 

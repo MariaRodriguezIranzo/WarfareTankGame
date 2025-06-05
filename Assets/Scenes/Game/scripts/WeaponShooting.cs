@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using TMPro;
-using UnityEngine.EventSystems;  // Para detectar si el cursor está sobre UI
+using UnityEngine.EventSystems;
 
 public class WeaponShooting : MonoBehaviour
 {
@@ -12,6 +12,9 @@ public class WeaponShooting : MonoBehaviour
     private int currentAmmo;
     public float reloadTime = 14f;
     private bool isReloading = false;
+
+    public float shootCooldown = 5f; // ⏳ Tiempo entre disparos (en segundos)
+    private float lastShootTime = -Mathf.Infinity;
 
     public AudioSource audioSource;
     public AudioClip shootSound;
@@ -25,11 +28,12 @@ public class WeaponShooting : MonoBehaviour
 
     void Update()
     {
-        // Bloquea disparo si el input está bloqueado o si estás sobre UI
         if (GameManager.inputBloqueado || EventSystem.current.IsPointerOverGameObject())
             return;
 
-        if (Input.GetButtonDown("Fire1") && currentAmmo > 0 && !isReloading)
+        bool puedeDisparar = Time.time >= lastShootTime + shootCooldown;
+
+        if (Input.GetButtonDown("Fire1") && currentAmmo > 0 && !isReloading && puedeDisparar)
         {
             Shoot();
         }
@@ -43,6 +47,7 @@ public class WeaponShooting : MonoBehaviour
     void Shoot()
     {
         currentAmmo--;
+        lastShootTime = Time.time; // ⏲️ Guardamos el tiempo del último disparo
 
         if (audioSource && shootSound)
         {
@@ -55,6 +60,7 @@ public class WeaponShooting : MonoBehaviour
         {
             rb.velocity = firePoint.forward * bulletSpeed;
         }
+
         AmmoUI.instance?.UpdateAmmoText(currentAmmo, maxAmmo);
     }
 

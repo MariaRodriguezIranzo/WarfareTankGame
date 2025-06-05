@@ -392,6 +392,7 @@ MonoBehaviour:
   bulletSpeed: 20
   maxAmmo: 100
   reloadTime: 2
+  shootCooldown: 2
   audioSource: {fileID: 8672090874322756449}
   shootSound: {fileID: 8300000, guid: 2fcf135f1f1d4d24ebb82302ed2b2c02, type: 3}
   reloadSound: {fileID: 8300000, guid: 9a10edb5e57987a42be9ad8dd2932361, type: 3}

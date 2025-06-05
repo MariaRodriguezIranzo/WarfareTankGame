@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/e22062e8-5fc2-4cbd-b112-b9d4693a33c1)
+
 # 🎮 Warfare Tank
 
 La tierra tiembla mientras los tanques avanzan...
@@ -35,7 +37,8 @@ Warfare Tank es un juego de combate de tanques en un mundo dominado por máquina
 # 🕹️ JUEGO
 ![image](https://github.com/user-attachments/assets/9ece655e-3163-4080-baaa-9bec7505abc7)
 
-![image](https://github.com/user-attachments/assets/fec07539-5c86-4d0f-97c2-387ddf72bd4c)
+![image](https://github.com/user-attachments/assets/5879bb42-5d23-4136-95e6-a41f84a472eb)
+
 
 
 

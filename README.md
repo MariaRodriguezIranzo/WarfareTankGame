@@ -32,7 +32,7 @@ Warfare Tank es un juego de combate de tanques en un mundo dominado por máquina
 | Pausar juego | Esc             |
 
 # 🕹️ JUEGO
-
+Hay 1 NPC en el cual puedes interactuar con el y te da monedas a cambio.
 ![image](https://github.com/user-attachments/assets/3d708c7b-8a10-4638-9916-0fbc08ece4d5)
 ![image](https://github.com/user-attachments/assets/10aebf72-cfa3-42eb-8633-a21215ed85e4)
 ![image](https://github.com/user-attachments/assets/d2cd0afb-6ab9-4b25-a8b0-aa0b7ca09e87)
